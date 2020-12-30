@@ -1,0 +1,16 @@
+package twilight_magical.minecraft_forge_mod.super_world_gem.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.creativetab.CreativeTabs;
+
+public class LoadSkeletonArchersSoulItem extends Item {
+	
+	public  LoadSkeletonArchersSoulItem(String unlocalizedName) {
+		super();
+		this.setTextureName("super_world_gem:SkeletonArchresSoul");
+		this.setUnlocalizedName(unlocalizedName);
+		this.setMaxStackSize(32);
+		this.setCreativeTab(CreativeTabs.tabMaterials);
+    }
+
+}

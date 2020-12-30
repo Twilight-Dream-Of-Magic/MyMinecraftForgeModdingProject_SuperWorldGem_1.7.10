@@ -1,0 +1,16 @@
+[
+{
+  "modid": "super_world_gem_forge_mod",
+  "name": "SuperWorldGem",
+  "description": "I'm Minecraft SuperWorldGem Mod - Can you imagine the cost of getting this item, consume a lot of resources in Minecraft world? - ChinaBilibili (https://space.bilibili.com/21974189) - Author as much as possible to repair all of the bug, I hope you have fun!",
+  "version": "(Alpha Test 1.9.0 - Frequency Count 30)",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Twlilght_Magical"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

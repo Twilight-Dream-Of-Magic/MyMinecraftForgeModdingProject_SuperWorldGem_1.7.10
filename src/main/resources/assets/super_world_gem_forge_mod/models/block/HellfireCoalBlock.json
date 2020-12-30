@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "up": "super_world_gem:blocks/HellfireCoalBlock",
+        "down": "super_world_gem:blocks/HellfireCoalBlock",
+        "north": "super_world_gem:blocks/HellfireCoalBlock",
+        "east": "super_world_gem:blocks/HellfireCoalBlock",
+        "south": "super_world_gem:blocks/HellfireCoalBlock",
+        "west": "super_world_gem:blocks/HellfireCoalBlock",
+        "particle": "super_world_gem:blocks/HellfireCoalBlock"
+    }
+}

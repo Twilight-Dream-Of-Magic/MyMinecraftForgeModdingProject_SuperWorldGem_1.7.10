@@ -1,0 +1,16 @@
+package twilight_magical.minecraft_forge_mod.super_world_gem.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.creativetab.CreativeTabs;
+
+public class LoadTitaniumIngotItem extends Item{
+	
+	public LoadTitaniumIngotItem(String unlocalizedName) {
+		super();
+		this.setTextureName("super_world_gem:(Ti) Titanium Ingot - [SuperWorldGemMod]");
+		this.setUnlocalizedName(unlocalizedName);
+		this.setMaxStackSize(64);
+		this.setCreativeTab(CreativeTabs.tabMaterials);
+	}
+
+}
