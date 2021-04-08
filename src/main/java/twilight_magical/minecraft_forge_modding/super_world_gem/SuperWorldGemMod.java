@@ -1,9 +1,10 @@
 package twilight_magical.minecraft_forge_modding.super_world_gem;
 
-import net.minecraft.item.Item;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.EnumHelper;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ModProxyInterface;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.PALCommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -23,7 +24,10 @@ public class SuperWorldGemMod
 	public static final String MODID = "super_world_gem_forge_mod";
 	public static final String VERSION = "Overall Rewrite";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "1.7.10";
-	private static final String MOD_NAME = "SuperWorldGemForgeMod";
+	public static final String MOD_NAME = "SuperWorldGemForgeMod";
+	public static final String CLIENT_PROXY_CLASS = "twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ComplexClientProxy";
+	public static final String SERVER_PROXY_CLASS = "twilight_magical.minecraft_forge_modding.super_world_gem.side_object.DedicatedServerProxy";
+	
    /*
     * Minecraft [Forge Mod Loader] Initialization this mod and create mod instance.
     * Minecraft [Forge Mod Loader] 初始化这个Mod和创建Mod实例
@@ -32,15 +36,16 @@ public class SuperWorldGemMod
 	public static SuperWorldGemMod MOD_INSTANCE;
 	
    /*
-    * Minecraft [Forge Mod Loader] For local clients and webservers
+    * Minecraft [Forge Mod Loader] For local clients and network servers
     * GameMod_SidedProxyClass is initialized with ComplexClientProxy and DedicatedServerProxy respectively
     * Minecraft[Forge Mod Loader] 对于本地客户端和网络服务端
     * GameMod_SidedProxyClass 分别用 ComplexClientProxy 和 DedicatedServerProxy 进行初始化
     */
-	@SidedProxy(clientSide = "twilight_magical.minecraft_forge_modding.super_world_gem.ComplexClientProxy", serverSide = "twilight_magical.minecraft_forge_modding.super_world_gem.DedicatedServerProxy")
+	@SidedProxy(clientSide = SuperWorldGemMod.CLIENT_PROXY_CLASS , serverSide = SuperWorldGemMod.SERVER_PROXY_CLASS)
 	//PAL = 物理与逻辑
 	//PAL = Physical And Logic
 	public static PALCommonProxy GameMod_SidedProxyClass;
+	public static ModProxyInterface modproxy;
 		    
        /* 
         * When loading Mod, the order of execution for all three methods is Preparatory Initialize(preInit)，Initialize(init)，Post-Initialize(postInit).
@@ -53,7 +58,7 @@ public class SuperWorldGemMod
 		* preInit function is mainly used to read the local configuration, create boxes, items, etc. and register them.
 		* preInit 函数主要用于读取本地配置，创建方块，物品等并注册他们
 		*/
-		@EventHandler
+		@Mod.EventHandler
 		public void preInit(FMLPreInitializationEvent modsEvent) //Preparatory Initializing
 		{
 		    GameMod_SidedProxyClass.preInit();
@@ -63,7 +68,7 @@ public class SuperWorldGemMod
 		* The init function is mainly used to build some of our custom data types, register custom synthesis methods, and other operations   
         * init 函数主要用于构建我们的一些自定义数据类型，注册自定义合成方法和其他操作
 		*/
-		@EventHandler
+		@Mod.EventHandler
 		public void init(FMLInitializationEvent modsEvent) //Initializing
 		{
 		    GameMod_SidedProxyClass.init();
@@ -73,7 +78,7 @@ public class SuperWorldGemMod
         * The postInit function interacts with other Minecraft Forge Mod classes or functions and eventually our Minecraft Forge Mod is finished loading
         * postInit 函数与其他的 Minecraft Forge Mod 类或函数交互，用于最后完成我们的 Minecraft Forge Mod 的加载
 		*/
-		@EventHandler
+		@Mod.EventHandler
 		public void postInit(FMLPostInitializationEvent modsEvent) //Later Initializing (Post-Initializing)
 		{
 		    GameMod_SidedProxyClass.postInit();

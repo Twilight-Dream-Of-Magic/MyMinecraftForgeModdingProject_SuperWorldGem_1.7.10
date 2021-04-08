@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class LoadTopSuperWorldGemItem extends ItemTool {
+public class LoadTopSuperWorldGemItem extends ItemTool
+{
 	
-	static ToolMaterial UNIVERSALSPUERWORLDGEM = EnumHelper.addToolMaterial("UNIVERSALSPUERWORLDGEM", 8, 0, 64F, 10240F, 1024);
-	
-	public LoadTopSuperWorldGemItem(String unlocalizedName) {
-		super(0.0F,UNIVERSALSPUERWORLDGEM,new HashSet());
+	protected LoadTopSuperWorldGemItem(Item.ToolMaterial material, String unlocalizedName) 
+	{
+		super(0.0F, material, new HashSet());
 		
 		//super(0.0f,UNIVERSALSPUERWORLDGEM,HashSet());
 		

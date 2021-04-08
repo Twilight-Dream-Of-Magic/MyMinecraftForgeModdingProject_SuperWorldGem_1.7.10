@@ -12,8 +12,8 @@ import net.minecraft.server.gui.MinecraftServerGui;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.server.management.*;
 import net.minecraft.server.network.*;
-import twilight_magical.minecraft_forge_modding.super_world_gem.DedicatedServerProxy;
 import twilight_magical.minecraft_forge_modding.super_world_gem.SuperWorldGemMod;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.DedicatedServerProxy;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

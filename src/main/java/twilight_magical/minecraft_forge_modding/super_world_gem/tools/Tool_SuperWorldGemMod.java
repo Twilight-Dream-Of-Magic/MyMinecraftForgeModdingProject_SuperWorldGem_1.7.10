@@ -2,6 +2,7 @@ package twilight_magical.minecraft_forge_modding.super_world_gem.tools;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,43 +36,42 @@ public class Tool_SuperWorldGemMod extends Item {
      * Variable: damage >>> The tool damage caused by the entity value, the specific formula is as follows (damage value + 4) ÷ 2
      * Variable: enchantability >>> Easily attract the value of enchant, here is not sure (stone 5, diamond 10, gold 22)
 	 *--------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
+	
+	private static final Item.ToolMaterial UNIVERSALSUPERWORLDGEM = EnumHelper.addToolMaterial("UNIVERSALSPUERWORLDGEM", 8, 0, 64F, 10240F, 1024);
+	
 	/*
-	static {
-		Item.ToolMaterial UNIVERSALSPUERWORLDGEM = EnumHelper.addToolMaterial("UNIVERSALSPUERWORLDGEM", 16, 0, 64.0F, 10240.0F, 1024);
-		Item.ToolMaterial SPUERWORLDTOPHUGESWORD = EnumHelper.addToolMaterial("SPUERWORLDTOPHUGESWORD", 16, 0, 8.0F, 10240000.0F, 4);
-		Item.ToolMaterial SPUERWORLDTOPSWORD = EnumHelper.addToolMaterial("SPUERWORLDTOPSWORD", 16, 51200, 16.0F, 10240000.0F, 8);
-		Item.ToolMaterial SPUERWORLDTOPPICKAXE = EnumHelper.addToolMaterial("SPUERWORLDTOPPICKAXE",16, 102400, 10240000.0F, 2560000.0F, 32);
-		Item.ToolMaterial SPUERWORLDTOPAXE = EnumHelper.addToolMaterial("SPUERWORLDTOPAXE", 16, 102400, 5120000.0F, 5120000.0F, 16);
-		Item.ToolMaterial SPUERWORLDTOPSHOVEL = EnumHelper.addToolMaterial("SPUERWORLDTOPSHOVEL", 16, 25600, 2560000.0F, 1280000.0F, 16);
-	}
+	private static final Item.ToolMaterial SUPERWORLDTOPHUGESWORD = EnumHelper.addToolMaterial("SUPERWORLDTOPHUGESWORD", 16, 0, 8.0F, 10240000.0F, 4);
+	private static final Item.ToolMaterial SUPERWORLDTOPSWORD = EnumHelper.addToolMaterial("SUPERWORLDTOPSWORD", 16, 51200, 16F, 7680000F, 8);
+	private static final Item.ToolMaterial SUPERWORLDTOPPICKAXE = EnumHelper.addToolMaterial("SUPERWORLDTOPPICKAXE",16, 102400, 10240000.0F, 2560000.0F, 32);
+	private static final Item.ToolMaterial SUPERWORLDTOPAXE = EnumHelper.addToolMaterial("SUPERWORLDTOPAXE", 16, 102400, 5120000F, 5120000F, 16);
+	private static final Item.ToolMaterial SUPERWORLDTOPSHOVEL = EnumHelper.addToolMaterial("SUPERWORLDTOPSHOVEL", 16, 25600, 2560000.0F, 1280000.0F, 16);
 	*/
-
+	
 	//Create a Minecraft item object named "TopSuperWorldGemItem"
 	//创建一个Minecraft物品对象，名称为“TopSuperWorldGemItem”
 	
 	public static Item TopSuperWorldGemItem;
 	
-	//public static Item TopSuperWorldHugeSword;
-	//public static Item TopSuperWorldSword;
-	//public static Item TopSuperWorldPickaxe;
-	//public static Item TopSuperWorldAxe;
-	//public static Item TopSuperWorldShovel;
-	//public static Item TopSuperWorldBlockBreaker;
+	public static Item TopSuperWorldHugeSword;
+	public static Item TopSuperWorldSword;
+	public static Item TopSuperWorldPickaxe;
+	public static Item TopSuperWorldAxe;
+	public static Item TopSuperWorldShovel;
+	public static Item TopSuperWorldBlockBreaker;
 
 	
 	public static void createItemTools() {
 		
 		//GameRegistry.registerItem(ItemObject = new LoadItemObjectNewClassFileName("GameDisplayItemName"),"GameInternalItemObjectStringName");
 		
-		GameRegistry.registerItem(TopSuperWorldGemItem = new LoadTopSuperWorldGemItem("TopSuperWorldGemItem"),"TopSuperWorldGemItem");
+		GameRegistry.registerItem(TopSuperWorldGemItem = new LoadTopSuperWorldGemItem(UNIVERSALSUPERWORLDGEM, "TopSuperWorldGemItem"),"TopSuperWorldGemItem");
 		
-		GameRegistry.registerItem(LoadTopSuperWorldHugeSword.TopSuperWorldHugeSword, "TopSuperWorldHugeSword");
-		GameRegistry.registerItem(LoadTopSuperWorldSword.TopSuperWorldSword, "TopSuperWorldSword");
-		GameRegistry.registerItem(LoadTopSuperWorldPickaxe.TopSuperWorldPickaxe, "TopSuperWorldPickaxe");
-		GameRegistry.registerItem(LoadTopSuperWorldAxe.TopSuperWorldAxe, "TopSuperWorldAxe");
-		GameRegistry.registerItem(LoadTopSuperWorldShovel.TopSuperWorldShovel, "TopSuperWorldShovel");
-		GameRegistry.registerItem(LoadTopSuperWorldBlockBreaker.TopSuperWorldBlockBreaker, "TopSuperWorldBlockBreaker");
+		GameRegistry.registerItem(TopSuperWorldHugeSword = LoadTopSuperWorldHugeSword.TopSuperWorldHugeSword, "TopSuperWorldHugeSword");
+		GameRegistry.registerItem(TopSuperWorldSword = LoadTopSuperWorldSword.TopSuperWorldSword, "TopSuperWorldSword");
+		GameRegistry.registerItem(TopSuperWorldPickaxe = LoadTopSuperWorldPickaxe.TopSuperWorldPickaxe, "TopSuperWorldPickaxe");
+		GameRegistry.registerItem(TopSuperWorldAxe = LoadTopSuperWorldAxe.TopSuperWorldAxe, "TopSuperWorldAxe");
+		GameRegistry.registerItem(TopSuperWorldShovel = LoadTopSuperWorldShovel.TopSuperWorldShovel, "TopSuperWorldShovel");
+		GameRegistry.registerItem(TopSuperWorldBlockBreaker = LoadTopSuperWorldBlockBreaker.TopSuperWorldBlockBreaker, "TopSuperWorldBlockBreaker");
 
 	}
 

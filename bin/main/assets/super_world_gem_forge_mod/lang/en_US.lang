@@ -1,0 +1,78 @@
+#Lang file was made using MCreator
+#Wed Jan 25 15:16:38 CST 2017
+
+#Mod Tab Class
+itemGroup.TabSuperWorldGemTools=SuperWorldGemMod
+#No Tab
+
+#Tile Class (Block)
+tile.MonsterBlock.name=MonsterBlock [SuperWorldGemMod]
+tile.MixedMineralBlock.name=MixedMineralBlock [SuperWorldGemMod] 
+tile.HellFireCoalBlock.name=HellFireCoalBlock [SuperWorldGemMod]
+tile.DangerToxicBlock.name=ToxicBlock [SuperWorldGemMod]
+tile.UnstableNuke.name=UnstableNuke [SuperWorldGemMod]
+tile.SuperWorldGemBlock.name=SuperWorldGemBlock
+tile.SuperWorldAetherGemBlock.name=SuperWorldGemBlock-Aether
+
+tile.ZincOre.name=(Zn) Zinc Ore - [SuperWorldGemMod]
+tile.AtannumOre.name=(Sn) Atannum Ore - [SuperWorldGemMod]
+tile.AluminiumOre.name=(Al) Aluminium Ore - [SuperWorldGemMod]
+tile.TitaniumOre.name=(Ti) Titanium Ore - [SuperWorldGemMod]
+tile.CopperOre.name=(Cu) Copper Ore - [SuperWorldGemMod]
+tile.SilverOre.name=(Ag) Silver Ore - [SuperWorldGemMod]
+#No Tile
+
+#Item Class
+item.TopFood_Cake.name=TopFood_Cake [SuperWorldGemMod]
+item.TopSuperWorldGemItem.name=SuperWorldGem [SuperWorldGemMod]
+item.MixedMineralBlockCrystallization.name=MixedMineralBlockCrystallization [SuperWorldGemMod]
+item.MonsterBlockCrystallization.name=MonsterBlockCrystallization [SuperWorldGemMod]
+item.SkeletonArchersSoul.name=SkeletonArchersSoul [SuperWorldGemMod]
+item.ArcticIceBall.name=ArcticIceBall [SuperWorldGemMod]
+item.DivineLightCream.name=DivineLightCream [SuperWorldGemMod]
+item.ExtremelyUnstableToxicLiquid.name=ExtremelyUnstableToxicLiquid [SuperWorldGemMod]
+
+#Item - Armor
+item.BossDropAromr_Head.name=SuperBossDropAromr Helmet [SuperWorldGemMod]
+item.BossDropAromr_Body.name=SuperBossDropAromr Body [SuperWorldGemMod]
+item.BossDropAromr_Leggins.name=SuperBossDropAromr Leggins [SuperWorldGemMod]
+item.BossDropAromr_Boots.name=SuperBossDropAromr Boots [SuperWorldGemMod]
+item.BasicStrongArmor_Head.name=BasicStrongArmor Helmet [SuperWorldGemMod]
+item.BasicStrongArmor_Body.name=BasicStrongArmor Body [SuperWorldGemMod]
+item.BasicStrongArmor_Leggins.name=BasicStrongArmor Leggins [SuperWorldGemMod]
+item.BasicStrongArmor_Boots.name=BasicStrongArmor Boots [SuperWorldGemMod]
+item.BedrockArmor_Head.name=BedrockAromr Helmet [SuperWorldGemMod]
+item.BedrockArmor_Body.name=BedrockAromr Body [SuperWorldGemMod]
+item.BedrockArmor_Leggins.name=BedrockAromr Leggins [SuperWorldGemMod]
+item.BedrockArmor_Boots.name=BedrockAromr Boots [SuperWorldGemMod]
+
+#Item - Tools
+item.TopSuperWorldHugeSword.name=[MinecraftNothingnessBorderTools]HugeSword
+item.TopSuperWorldSword.name=[MinecraftNothingnessBorderTools]Sword
+item.TopSuperWorldPickaxe.name=[MinecraftNothingnessBorderTools]Pickaxe
+item.TopSuperWorldAxe.name=[MinecraftNothingnessBorderTools]Axe
+item.TopSuperWorldShovel.name=[MinecraftNothingnessBorderTools]Shovel
+item.TopSuperWorldBlockBreaker=[MinecraftNothingnessBorderTools]WorldBlockBreaker
+item.ConfusionSuperWorld_Trigger.name=MinecraftSuperWorldKey
+item.ConfusionSuperWorld_AetherTrigger.name=MinecraftSuperWorldKey-Aether
+
+#Item - Metal Ingot
+item.ZincIngot.name=(Zn) Zinc Ingot - [SuperWorldGemMod]
+item.TitaniumIngot.name=(Ti) Titanium Ingot - [SuperWorldGemMod]
+item.SilverIngot.name=(Ag) Silver Ingot - [SuperWorldGemMod]
+item.CopperIngot.name=(Cu) Copper Ingot - [SuperWorldGemMod]
+item.AtannumIngot.name=(Sn) Atannum Ingot - [SuperWorldGemMod]
+item.AluminiumIngot.name=(Al) Aluminium Ingot - [SuperWorldGemMod]
+item.SuperWorldAlloyIngot.name=Super World Alloy Ingot - [SuperWorldGemMod]
+
+#Item - Gun
+item.TopParticleGun.name=ParticleGun [SuperWorldGemMod]
+
+#No Item
+
+#Entity Class
+entity.CrazyDifficultyShadowBoss.name=SuperWorldGemBoss-ShadowTwlilghtYujiangBow
+entity.CrazyDifficultyShadowBoss2.name=SuperWorldGemBoss2-ShadowTwlilghtYujiangSword
+#No Entity 
+
+

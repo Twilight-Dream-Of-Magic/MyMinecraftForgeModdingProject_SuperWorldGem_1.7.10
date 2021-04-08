@@ -56,65 +56,51 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 	 *	}
 	 * 
 	 ***/
-	private static final int THIS_TOOLHARVEST_LEVEL = 32; // Set custom tool the harvest level
-	public static final ToolMaterial SPUERWORLDTOPBLOCKBREAKER = EnumHelper.addToolMaterial("SPUERWORLDTOPBLOCKBREAKER", THIS_TOOLHARVEST_LEVEL, 20480000, 51200000.0F, 20480000F, 0);
 	
+	private static final Item.ToolMaterial SUPERWORLDTOPBLOCKBREAKER = EnumHelper.addToolMaterial("SUPERWORLDTOPBLOCKBREAKER", LoadTopSuperWorldBlockBreaker.getThisToolHarvestLevel(), 20480000, 51200000.0F, 20480000F, 0);
+	
+	private static final int THIS_TOOLHARVEST_LEVEL = 32; // Set custom tool the harvest level
 	@SuppressWarnings("unused")
 	public static int getThisToolHarvestLevel()
 	{
-		 
-		if (THIS_TOOLHARVEST_LEVEL < 0 || THIS_TOOLHARVEST_LEVEL > 32)
-		{
-			return THIS_TOOLHARVEST_LEVEL;
-		}
-		else if(THIS_TOOLHARVEST_LEVEL == 0)
-		{
-			return SPUERWORLDTOPBLOCKBREAKER.getHarvestLevel();
-		}
-		else
-		{
-			return SPUERWORLDTOPBLOCKBREAKER.getHarvestLevel();
-		}
-		//return THIS_TOOLHARVEST_LEVEL * 2;
-		
+		return THIS_TOOLHARVEST_LEVEL;
 	}
 	
 	public static final Set<Block> allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue = Sets.newHashSet(new Block[]
 	{
-	    Blocks.bedrock, Blocks.command_block, Blocks.portal, Blocks.end_portal_frame,Blocks.monster_egg, Blocks.mob_spawner
-	    //From the impossible to destroy the unbreakable block, give the resistance to destroy the effect of efficiency?
-	    //来自不可能破坏的不易碎块，给予的抵抗破坏效率的效果 ？ 
-	    //This Is Allow Player To Harvest Of List For The Unbreakable Cube
+		Blocks.bedrock, Blocks.command_block, Blocks.end_portal_frame,Blocks.monster_egg, Blocks.mob_spawner
+		//From the impossible to destroy the unbreakable block, give the resistance to destroy the effect of efficiency?
+		//来自不可能破坏的不易碎块，给予的抵抗破坏效率的效果 ？ 
+		//This Is Allow Player To Harvest Of List For The Unbreakable Cube
 	});
 	
+	public static final Set<Block> bannedPlayerHarvest_easyBlocksEffectiveValue = Sets.newHashSet(new Block[]
+	{
+		Blocks.air, Blocks.fire, Blocks.lava, Blocks.water, Blocks.portal, Blocks.end_portal, Blocks.flowing_lava, Blocks.flowing_water, Blocks.cake
+		//From the possible to destroy the breakable block?
+		//来自可能破坏的易碎块 ？ 
+		//This Is Not Allow Player To Harvest Of List For The Breakable Cube
+	});
 	
-	public static Item TopSuperWorldBlockBreaker = new ItemToolSuperWorldBlockBreaker(0.0f, SPUERWORLDTOPBLOCKBREAKER, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
+	public static Item TopSuperWorldBlockBreaker = new ItemToolSuperWorldBlockBreaker(0.0f, SUPERWORLDTOPBLOCKBREAKER, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
 	
 	private static final ResourceLocation texture = new ResourceLocation("super_world_gem:textures/items/WorldBedrockTheDead.gif");
 
 	public static class ItemToolSuperWorldBlockBreaker extends ItemTool
 	{
 		public static Set<Block> BlocksEffectiveValue;
-		
-		public static final Set<Block> bannedPlayerHarvest_easyBlocksEffectiveValue = Sets.newHashSet(new Block[]
-		{
-			Blocks.air, Blocks.fire, Blocks.lava, Blocks.water, Blocks.end_portal, Blocks.flowing_lava, Blocks.flowing_water, Blocks.cake
-			//From the possible to destroy the breakable block?
-			//来自可能破坏的易碎块 ？ 
-			//This Is Not Allow Player To Harvest Of List For The Breakable Cube
-		});
 				
 		public ItemStack itemStack = new ItemStack(this);
 		
 		//Damage versus entities
-		private float damageVsEntity = 16.0f; //public
+		private float damageVsEntity = 16.0f; //Can set public
 			   
 		//The material this tool is made from.
-		protected ToolMaterial thisToolMaterial; //public
+		protected ToolMaterial thisToolMaterial; //Can set public
 		
 		//This tool efficiency on the proper material
-		protected final float eOnPM_Speed = 51200000.0F; //public
-		protected float efficiencyOnProperMaterial = eOnPM_Speed; //public
+		protected final float eOnPM_Speed = 51200000.0F; //Can set public
+		protected float efficiencyOnProperMaterial = eOnPM_Speed; //Can set public
 		
 		private HashMap<String, Integer> toolClasses = new HashMap<String, Integer>();
 		public String toolClass = "SPUERWORLDTOPBLOCKBREAKER";
@@ -164,13 +150,17 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 	  
 		}
 		
+		// Damage value of ItemStack is Item Meta-data
 		public int getMetadata(ItemStack stack)
 		{
-			return this.getDamage(stack);
+			return stack.getItemDamage();
 		}
 		
-		public boolean func_150897_b(Block block) // Function name = func_150897_b is a isBlockCanBeHarvested()
+		// Function name = func_150897_b is a isBlockCanBeHarvested()
+		@Override
+		public boolean func_150897_b(Block block)
 		{
+			/*
 			if(allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block) == true && bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == false)
 			{
 				return true;
@@ -179,8 +169,18 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 			{
 				super.func_150897_b(block);
 			}
+			else if (allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block) == true && bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == true)
+			{
+				return true;
+			}
 			return false;
-			//return allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block) ? true : this.func_150897_b(block);
+			*/
+			
+			if(block != Blocks.air)
+			{
+				return true;
+			}
+			return false;
 		}
 		
 		/**
@@ -203,19 +203,23 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		 * @return The damage strength of block
 		 */
 		@Override
-		public float getDigSpeed(ItemStack stack, Block block, int meta)
+		public float getDigSpeed(ItemStack itemStack, Block block, int meta)
 		{
-			if(ForgeHooks.isToolEffective(stack, block, meta) == false)
+			
+			if(ForgeHooks.isToolEffective(itemStack, block, meta))
 			{
-				return super.getDigSpeed(stack, block, meta);
+				return this.efficiencyOnProperMaterial;
+			}
+			else if(!ForgeHooks.isToolEffective(itemStack, block, meta))
+			{
+				return super.getDigSpeed(itemStack, block, meta);
 			}
 			else
 			{
-				return efficiencyOnProperMaterial;
+				return 0.0F;
 			}
 			
 		}
-		
 		
 		/**
 		 * @Notes First, the against value based on the digging speed of the given block. 
@@ -236,8 +240,12 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		 * 反向和过载数据组，用于突破挖掘效率的界限，针对于牢不可破的立方体。
 		 * 
 		 */
+		
+		//This Function name getDestorySpeed (func_150893_a) is destroy speed of special block
+		//This Function name func_150893_a is a getStrVsBlock() or getEfficiencyVersusBlock()
+		
 		@Override
-		public float func_150893_a(ItemStack stack, Block block) //Function name = func_150893_a is a getStrVsBlock() or getEfficiencyVersusBlock()
+		public float func_150893_a(ItemStack itemStack, Block block)
 		{
 			// Reacquire, new harvest level values, applied to custom tools material. Then, a new dig speed is generated.
 			// 重新获取，新的收获水平值，应用于自定义工具材料。然后，生成新的挖掘速度。
@@ -246,40 +254,43 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 			
 			for(int DestoryBlockSpeedOverflow = 0; DestoryBlockSpeedOverflow <= allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.toString().length(); DestoryBlockSpeedOverflow++)
 			{
-				if(this.BlocksEffectiveValue.equals(block) == true)
+				if(this.BlocksEffectiveValue.equals(block) == true || this.canHarvestBlock(block, itemStack) == true)
 				{
 					return this.efficiencyOnProperMaterial;
 				}
 				else if (block.getMaterial() == Material.wood || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants)
 				{
-	    			return this.getDigSpeed(stack, block, this.getMetadata(stack));
+					return super.func_150893_a(itemStack, block);
 	    		}
 				else
 				{
 					
-					if(this.bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == false)
+					if(bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == false && allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block) == true)
 					{
 						myToolEfficiency = this.efficiencyOnProperMaterial;
 					}
-					else if(this.bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == true)
+					else if(bannedPlayerHarvest_easyBlocksEffectiveValue.contains(block) == true && allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block) == false)
 					{
-						myToolEfficiency = super.func_150893_a(stack, block);
+						myToolEfficiency = super.func_150893_a(itemStack, block);
 					}
-					//return this.BlocksEffectiveValue.contains(block) ? this.efficiencyOnProperMaterial : super.func_150893_a(stack, block);
+					else
+					{
+						myToolEfficiency = this.getDigSpeed(itemStack, block, this.getMetadata(itemStack));
+					}
 				}
 				
 			}
 			
-			if(myToolEfficiency == 0.0f)
+			if(myToolEfficiency == 0.0F && this.canHarvestBlock(block, itemStack) == true)
 			{
-				return this.BlocksEffectiveValue.contains(block) ? this.efficiencyOnProperMaterial : super.func_150893_a(stack, block);
+				return this.BlocksEffectiveValue.contains(block) ? this.efficiencyOnProperMaterial : this.getDigSpeed(itemStack, block, this.getMetadata(itemStack));
 			}
-			else if (myToolEfficiency == super.func_150893_a(stack, block))
+			else if (myToolEfficiency == super.func_150893_a(itemStack, block))
 			{
 				return myToolEfficiency;
 			}
 			
-			return efficiencyOnProperMaterial != 0.0f ? efficiencyOnProperMaterial : this.getThisEfficiencyOnProperMaterial();
+			return myToolEfficiency != 0.0f ? myToolEfficiency : this.getThisEfficiencyOnProperMaterial();
 	    		
 		}
 		
@@ -410,17 +421,22 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		@Override
 		public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int positionX, int positionY, int positionZ, int length, float a, float b, float c)
 		{
-			super.onItemUse(itemstack, player, world, positionX, positionY, positionZ, length, a, b, c);
+			//super.onItemUse(itemstack, player, world, positionX, positionY, positionZ, length, a, b, c);
 			
 			Block look_this_block = world.getBlock(positionX, positionY, positionZ);
 			Item set_item = this.getItemFromBlock(look_this_block);
+			
+			//是否已获得物品 ？
+			//Has it been obtained item ?
+			boolean isObtained = false;
+			
 			//Block block = Blocks.bedrock;
 			//Block block1 = Block.air;
 			
 			 
 			 if (!world.isRemote) //boolean value is true of result from client, boolean value is false of result from server
 			 {
-				if(world.blockExists(positionX, positionY, positionZ) == true && world.getBlock(positionX, positionY, positionZ) == look_this_block)
+				if(world.blockExists(positionX, positionY, positionZ) == true)
 				{
 					/**
 					 * Sets a block to 0 and notifies relevant systems with the block change  Args: x, y, z
@@ -436,32 +452,62 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 				     	//给予使用这个工具的玩家，向库存增加一个(基岩)块物品
 						if(look_this_block == Blocks.bedrock)
 						{
+							
+							if (isObtained == false)
+							{
+								isObtained = true;
+								player.inventory.addItemStackToInventory(new ItemStack(Blocks.bedrock, 1));
+							}
+							
 							world.setBlockToAir(positionX, positionY, positionZ);
-							player.inventory.addItemStackToInventory(new ItemStack(Blocks.bedrock, 1));
 						}
 						
 						if(look_this_block == Blocks.obsidian)
 						{
+							
+							if (isObtained == false)
+							{
+								player.inventory.addItemStackToInventory(new ItemStack(Blocks.obsidian, 1));
+								isObtained = true;
+							}
+							
 							world.setBlockToAir(positionX, positionY, positionZ);
-							player.inventory.addItemStackToInventory(new ItemStack(Blocks.obsidian, 1));
 						}
 						
 						if(look_this_block == Blocks.command_block)
 						{
+							
+							if (isObtained == false)
+							{
+								player.inventory.addItemStackToInventory(new ItemStack(Blocks.command_block, 1));
+								isObtained = true;
+							}
+							
 							world.setBlockToAir(positionX, positionY, positionZ);
-							player.inventory.addItemStackToInventory(new ItemStack(Blocks.command_block, 1));
 						}
 						
 						if(look_this_block == Blocks.dragon_egg)
-						{
+						{			
+							
+							if (isObtained == false)
+							{
+								player.inventory.addItemStackToInventory(new ItemStack(Blocks.dragon_egg, 1));
+								isObtained = true;
+							}
+							
 							world.setBlockToAir(positionX, positionY, positionZ);
-							player.inventory.addItemStackToInventory(new ItemStack(Blocks.dragon_egg, 1));
 						}
 						
 			     		if(look_this_block != Blocks.air)
 			     		{
+			     			
+			     			if (isObtained == false)
+							{
+			     				player.inventory.addItemStackToInventory(new ItemStack(set_item, 1));
+			     				isObtained = true;
+							}
+			     			
 			     			world.setBlockToAir(positionX, positionY, positionZ);
-			     			player.inventory.addItemStackToInventory(new ItemStack(set_item, 1));
 			     		}
 			     		//world.setBlock(positionX, positionY, positionZ, block1);
 			     		itemstack.damageItem(1, player); //Reset the this tool number of using

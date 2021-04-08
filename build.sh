@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# ./gradlew.bat build --full-stacktrace --info --offline
-./gradlew.bat build --full-stacktrace --info
+# ./gradlew.bat build -Dfile.encoding=UTF-8 --full-stacktrace --info --offline
+# ./gradlew.bat build -Dfile.encoding=UTF-8 --full-stacktrace --info

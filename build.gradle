@@ -1,20 +1,22 @@
 buildscript {
 	repositories {
+		
 		maven {
 			name = "central"
+			url = "https://jcenter.bintray.com/"
 			url = "https://repo1.maven.org/maven2"
 			url = "http://insecure.repo1.maven.org/maven2"
+			//url = "http://maven.aliyun.com/nexus/content/groups/public/"
+			//url = "http://maven.aliyun.com/nexus/content/repositories/jcenter"
 		}
 		
 		maven {
 			name = "forge"
-			url = "http://resources.download.minecraft.net/maven"
-			url = "https://files.minecraftforge.net/maven"
-			url = "http://download.mcbbs.net/maven"
-			url = "http://nossl.lss233.com/artifactory/minecraft"
-			url = "http://bmclapi2.bangbang93.com/maven"
-			// url = "http://lss233.littleservice.cn/repositories/minecraft"
-			// url = "http://crystal.app.lss233.com/repositories/minecraft"
+			url = "https://crystal.app.lss233.com/repositories/forgedev"
+			//url = "http://crystal.app.lss233.com/repositories/forgedev"
+			//url = "https://files.minecraftforge.net/maven"
+			//url = "https://bmclapi2.bangbang93.com/maven"
+			//url = "https://download.mcbbs.net/maven"
 		}
 		
 		maven {
@@ -24,22 +26,24 @@ buildscript {
 
 		maven {
 			name = "minecraft"
-			url = "http://resources.download.minecraft.net/maven"
-			url = "http://download.mcbbs.net/maven"
-			url = "http://nossl.lss233.com/artifactory/minecraft"
-			url = "https://libraries.minecraft.net/"
-			url = "http://bmclapi2.bangbang93.com/maven"
-			// url = "http://lss233.littleservice.cn/repositories/minecraft"
-			// url = "http://crystal.app.lss233.com/repositories/minecraft"
+			url = "https://crystal.app.lss233.com/repositories/minecraft"
+			url = "http://crystal.app.lss233.com/repositories/minecraft"
+			//url = "https://download.mcbbs.net/maven"
+			//url = "https://bmclapi2.bangbang93.com/maven"
+			//url = "https://libraries.minecraft.net/"
+			//url = "http://resources.download.minecraft.net/maven"
 		}
 
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		//classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '1.2.+', changing: true
 	}
 }
 
 apply plugin: 'forge'
+//apply plugin: 'net.minecraftforge.gradle'
+//apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "Alpha Test 1.9.0"
 group = "twilight_magical.minecraft_forge_modding" //http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -47,13 +51,15 @@ archivesBaseName = "SuperWorldGem" //SuperWorldGem_(version).jar
 
 minecraft {
 	version = "1.7.10-10.13.4.1614-1.7.10"
-	//mappings = "stable_12" //Minecraft Coder Pack mapping channel
 	runDir = "eclipse"
+
+	//mappings = "stable_12" //Minecraft Coder Pack mapping channel
 }
 
 repositories {
 	maven {
 		name = "central"
+		url = "https://jcenter.bintray.com/"
 		url = "https://repo1.maven.org/maven2"
 		url = "http://insecure.repo1.maven.org/maven2"
 	}

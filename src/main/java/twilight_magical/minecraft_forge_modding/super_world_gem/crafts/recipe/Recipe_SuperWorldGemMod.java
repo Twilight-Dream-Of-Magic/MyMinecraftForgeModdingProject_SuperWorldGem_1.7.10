@@ -67,6 +67,24 @@ public class Recipe_SuperWorldGemMod
 						Character.valueOf('8'), new ItemStack(Items.flint_and_steel, 1)
 				}
 	    );
+		
+		ItemStack RecipeItem_TopSuperWorldBlockBreaker = new ItemStack(Tool_SuperWorldGemMod.TopSuperWorldBlockBreaker,1);
+		GameRegistry.addRecipe
+		(
+			RecipeItem_TopSuperWorldBlockBreaker, new Object[]
+			{
+				"012", "345", "678",
+				Character.valueOf('0'), new ItemStack(Block_SuperWorldGemMod.SuperWorldGemBlock, 1),
+				Character.valueOf('1'), new ItemStack(Blocks.end_stone, 1),
+				Character.valueOf('2'), new ItemStack(Block_SuperWorldGemMod.SuperWorldGemBlock, 1),
+				Character.valueOf('3'), new ItemStack(Blocks.beacon, 1),
+				Character.valueOf('4'), new ItemStack(Tool_SuperWorldGemMod.TopSuperWorldPickaxe, 1),
+				Character.valueOf('5'), new ItemStack(Blocks.beacon, 1),
+				Character.valueOf('6'), new ItemStack(Blocks.obsidian, 1),
+				Character.valueOf('7'), new ItemStack(Item_SuperWorldGemMod.SuperWorldAlloyIngot, 1),
+				Character.valueOf('8'), new ItemStack(Blocks.obsidian, 1), 
+			}
+		);
 
 		ItemStack RecipeItem_MixedMineralBlockCrystallization = new ItemStack(Item_SuperWorldGemMod.MixedMineralBlockCrystallization, 1);
 		GameRegistry.addShapelessRecipe

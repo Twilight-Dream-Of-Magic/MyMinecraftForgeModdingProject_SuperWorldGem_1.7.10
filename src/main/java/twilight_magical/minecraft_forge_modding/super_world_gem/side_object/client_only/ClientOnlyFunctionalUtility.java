@@ -22,10 +22,10 @@ import net.minecraft.util.IRegistry;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraft.world.World;
-import twilight_magical.minecraft_forge_modding.super_world_gem.ComplexClientProxy;
 import twilight_magical.minecraft_forge_modding.super_world_gem.SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.blocks.Block_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.items.Item_SuperWorldGemMod;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ComplexClientProxy;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

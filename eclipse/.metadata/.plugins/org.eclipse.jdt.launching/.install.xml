@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
-<entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\jre" stamp="1534509106688"/>
-<entry loc="E:\Eclipse\jee-2020-12-R-incubation\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.1.v20201027-0507" stamp="1608963452170"/>
-<entry loc="E:\Eclipse\jee-2020-12-R-incubation\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.1.v20201027-0507\jre" stamp="1608963451768"/>
-<entry loc="E:\Java\SE Runtime Environment\Version 8\Windows 64\JAVA_HOME" stamp="1534509165546"/>
-<entry loc="C:\JavaRunTime\Version8u152" stamp="1510573469219"/>
-<entry loc="C:\Program Files\Java\jre1.8.0_161" stamp="1518087132589"/>
+    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME" stamp="1534509167434"/>
+    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\bin" stamp="1534509105908"/>
+    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\jre" stamp="1534509106688"/>
+    <entry loc="E:\Eclipse\jee-2021-03-R-win32-x86_64\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955" stamp="1617704427864"/>
+    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\jre\bin" stamp="1534509106551"/>
+    <entry loc="E:\Eclipse\jee-2021-03-R-win32-x86_64\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955\jre" stamp="1617704427092"/>
 </dirs>
