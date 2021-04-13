@@ -1,0 +1,113 @@
+SuperWorldGem 1.7.10 - Living Hardness Boundary patch
+=======================================================
+
+Goal
+----
+Keep the original idea of LoadTopSuperWorldBlockBreaker: an abnormal tool whose
+own harvest ability can exceed normal tool rules. Do NOT turn Bedrock into a
+normal soft block and do NOT use right-click setBlockToAir() as the actual
+breaking mechanism.
+
+What changed
+------------
+1. LoadTopSuperWorldBlockBreaker still starts from harvest level 32 and keeps the
+   original huge efficiency/material values and the old reverse/overflow code.
+
+2. Each real ItemStack now owns a persistent living harvest level in NBT:
+     SWG_LivingHarvestLevel
+     SWG_LivingHarvestOverflow
+     SWG_LivingHarvestLastTick
+
+   When that exact tool is held against an allowed block whose hardness read is
+   negative, its internal harvest level doubles once per world tick:
+
+     32 -> 64 -> 128 -> ... -> 1073741824 -> -2147483648
+
+   The final transition is a real Java signed-int overflow. The overflow flag is
+   then permanently stored on that ItemStack.
+
+3. Forge's ordinary harvest-level API must not see the negative overflow value,
+   because Forge interprets a negative tool level as "not this kind of tool".
+   Therefore the living tool keeps the real overflow internally, but exposes
+   Integer.MAX_VALUE to normal Forge harvest checks after overflow.
+
+4. A 1.7.10 coremod transformer patches exactly ForgeHooks.blockStrength().
+   The original Forge logic is:
+
+     float hardness = block.getBlockHardness(...);
+     if (hardness < 0.0F) return 0.0F;
+
+   The patch inserts exactly one observation hook between those statements:
+
+     float hardness = block.getBlockHardness(...);
+     hardness = LivingHardnessHooks.transformObservedHardness(..., hardness);
+     if (hardness < 0.0F) return 0.0F;
+
+   Block.blockHardness itself is never changed. A normal query of Bedrock still
+   returns -1.0F.
+
+5. Before the tool's real int overflow, the hook returns the original negative
+   hardness unchanged, so Forge still returns zero breaking progress.
+
+6. After overflow, only blocks from the original
+   allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue set can cross the
+   boundary. The local hardness value observed by this one blockStrength call is
+   replaced by:
+
+     efficiencyOnProperMaterial * 40
+     = 51,200,000 * 40
+     = 2,048,000,000
+
+   With the original tool efficiency and Forge's /30 correct-tool formula this
+   is about 1200 ticks / 60 seconds of continuous mining. Haste, effects or other
+   Forge modifiers can alter the exact time.
+
+7. The old right-click direct deletion path is disabled. onItemUse now returns
+   false. The original source is preserved verbatim at:
+
+     /legacy_original/LoadTopSuperWorldBlockBreaker.java.original.txt
+
+Files added
+-----------
+src/main/java/twilight_magical/minecraft_forge_modding/super_world_gem/
+  core/SuperWorldGemCorePlugin.java
+  core/ForgeHooksHardnessTransformer.java
+  tools/LivingHardnessHooks.java
+
+Files changed
+-------------
+src/main/java/.../tools/LoadTopSuperWorldBlockBreaker.java
+build.gradle
+
+Tuning points
+-------------
+- Birth tool level:
+    THIS_TOOLHARVEST_LEVEL = 32
+
+- How fast level grows:
+    growLivingHarvestLevel(): currentLevel << 1
+
+- Which old explicit special blocks may cross negative hardness:
+    allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue
+
+- Mining duration after boundary crossing:
+    HARDNESS_BOUNDARY_RESISTANCE_MULTIPLIER = 40.0F
+
+  Around 40 means roughly 60 seconds with the original 51.2M tool efficiency.
+  Around 20 means roughly 30 seconds; around 80 means roughly 120 seconds.
+
+Design boundary deliberately preserved
+--------------------------------------
+This patch does NOT mean "Bedrock hardness is now 2,048,000,000".
+Bedrock still owns -1.0F. The finite value exists only in the local hardness
+variable used for one ForgeHooks.blockStrength calculation while this living,
+overflowed tool is held.
+
+Build verification status in the assistant environment
+------------------------------------------------------
+The project could not be compiled here because the legacy Gradle wrapper needs
+to download Gradle 4.4.1 and this execution container has no outbound network.
+The attempted command was ./gradlew compileJava --offline; the wrapper failed
+before Gradle/code compilation at the distribution download step. No compiler
+failure from the modified Java sources was observed because compilation never
+started.

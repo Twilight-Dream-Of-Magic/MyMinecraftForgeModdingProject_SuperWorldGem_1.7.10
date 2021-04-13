@@ -34,17 +34,17 @@ item.ExtremelyUnstableToxicLiquid.name=ExtremelyUnstableToxicLiquid [SuperWorldG
 
 #Item - Armor
 item.BossDropAromr_Head.name=SuperBossDropAromr Helmet [SuperWorldGemMod]
-item.BossDropAromr_Body.name=SuperBossDropAromr Body [SuperWorldGemMod]
-item.BossDropAromr_Leggins.name=SuperBossDropAromr Leggins [SuperWorldGemMod]
+item.BossDropAromr_Body.name=SuperBossDropAromr Corset [SuperWorldGemMod]
+item.BossDropAromr_Leggins.name=SuperBossDropAromr Leggings [SuperWorldGemMod]
 item.BossDropAromr_Boots.name=SuperBossDropAromr Boots [SuperWorldGemMod]
-item.BasicStrongArmor_Head.name=BasicStrongArmor Helmet [SuperWorldGemMod]
-item.BasicStrongArmor_Body.name=BasicStrongArmor Body [SuperWorldGemMod]
-item.BasicStrongArmor_Leggins.name=BasicStrongArmor Leggins [SuperWorldGemMod]
-item.BasicStrongArmor_Boots.name=BasicStrongArmor Boots [SuperWorldGemMod]
-item.BedrockArmor_Head.name=BedrockAromr Helmet [SuperWorldGemMod]
-item.BedrockArmor_Body.name=BedrockAromr Body [SuperWorldGemMod]
-item.BedrockArmor_Leggins.name=BedrockAromr Leggins [SuperWorldGemMod]
-item.BedrockArmor_Boots.name=BedrockAromr Boots [SuperWorldGemMod]
+item.helmet_SuperWorldGemArmor.name=BasicStrongArmor Helmet [SuperWorldGemMod]
+item.corset_SuperWorldGemArmor.name=BasicStrongArmor Corset [SuperWorldGemMod]
+item.leggings_SuperWorldGemArmor.name=BasicStrongArmor Leggings [SuperWorldGemMod]
+item.boots_SuperWorldGemArmor.name=BasicStrongArmor Boots [SuperWorldGemMod]
+item.helmet_MinecraftBedrock_SuperWorldGemArmor.name=BedrockAromr Helmet [SuperWorldGemMod]
+item.corset_MinecraftBedrock_SuperWorldGemArmor.name=BedrockAromr Corset [SuperWorldGemMod]
+item.leggings_MinecraftBedrock_SuperWorldGemArmor.name=BedrockAromr Leggings [SuperWorldGemMod]
+item.boots_MinecraftBedrock_SuperWorldGemArmor.name=BedrockAromr Boots [SuperWorldGemMod]
 
 #Item - Tools
 item.TopSuperWorldHugeSword.name=[MinecraftNothingnessBorderTools]HugeSword
@@ -71,8 +71,8 @@ item.TopParticleGun.name=ParticleGun [SuperWorldGemMod]
 #No Item
 
 #Entity Class
-entity.CrazyDifficultyShadowBoss.name=SuperWorldGemBoss-ShadowTwlilghtYujiangBow
-entity.CrazyDifficultyShadowBoss2.name=SuperWorldGemBoss2-ShadowTwlilghtYujiangSword
+entity.CrazyDifficultyShadowBoss.name=SuperWorldGemBoss-ShadowTwllightMagicalBow
+entity.CrazyDifficultyShadowBoss2.name=SuperWorldGemBoss2-ShadowTwilightDreamSword
 #No Entity 
 
 

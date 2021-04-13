@@ -1,12 +1,12 @@
 {
     "parent": "block/cube",
     "textures": {
-        "up": "super_world_gem:blocks/MonsterBlock",
-        "down": "super_world_gem:blocks/MonsterBlock",
-        "north": "super_world_gem:blocks/MonsterBlock",
-        "east": "super_world_gem:blocks/MonsterBlock",
-        "south": "super_world_gem:blocks/MonsterBlock",
-        "west": "super_world_gem:blocks/MonsterBlock",
-        "particle": "super_world_gem:blocks/MonsterBlock"
+        "up": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "down": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "north": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "east": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "south": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "west": "super_world_gem_forge_mod:blocks/MonsterBlock",
+        "particle": "super_world_gem_forge_mod:blocks/MonsterBlock"
     }
 }

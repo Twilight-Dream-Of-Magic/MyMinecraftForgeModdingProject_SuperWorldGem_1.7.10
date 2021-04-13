@@ -9,43 +9,125 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 //import ClassData.TwilightMagical.MinecraftForgeMod.SuperWorldGem.items.*;
 //import ClassData.TwilightMagical.MinecraftForgeMod.SuperWorldGem.SuperWorldGemMod;
 
-public class Item_SuperWorldGemMod extends Item {
+public class Item_SuperWorldGemMod {
 	
-	public static Item SilverIngot;
-	public static Item AluminiumIngot;
-	public static Item CopperIngot;
-	public static Item AtannumIngot;
-	public static Item TitaniumIngot;
-	public static Item ZincIngot;
-	public static Item SuperWorldAlloyIngot;
+	public static Item SilverIngot = new LoadSilverIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Ag) Silver Ingot - [SuperWorldGemMod]")
+			.setUnlocalizedName("SilverIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
 	
-	public static Item MixedMineralBlockCrystallization;
-	public static Item MonsterBlockCrystallization;
+	public static Item AluminiumIngot = new LoadAluminiumIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Al) Aluminium Ingot - [SuperWorldGemMod]")
+			.setUnlocalizedName("AluminiumIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
 	
-	public static Item ArcticIceBall;
-	public static Item DivineLightCream;
-	public static Item ExtremelyUnstableToxicLiquid;
-	public static Item SkeletonArchersSoul;
+	public static Item CopperIngot = new LoadCopperIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Cu) Copper Ingot - [SuperWorldGemMod")
+			.setUnlocalizedName("CopperIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item AtannumIngot = new LoadAtannumIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Sn) Atannum Ingot - [SuperWorldGemMod]")
+			.setUnlocalizedName("AtannumIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+
+	
+	public static Item TitaniumIngot = new LoadTitaniumIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Ti) Titanium Ingot - [SuperWorldGemMod]")
+			.setUnlocalizedName("TitaniumIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item ZincIngot = new LoadZincIngotItem()
+			.setTextureName("super_world_gem_forge_mod:(Zn) Zinc Ingot - [SuperWorldGemMod]")
+			.setUnlocalizedName("ZincIngot")
+			.setMaxStackSize(64)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item SuperWorldAlloyIngot = new LoadSuperWorldAlloyIngotItem()
+			.setTextureName("super_world_gem_forge_mod:Super World Alloy Ingot - [MinecraftGameMod]")
+			.setUnlocalizedName("SuperWorldAlloyIngot")
+			.setMaxStackSize(16)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	
+	
+	public static Item MixedMineralBlockCrystallization = new LoadMixedMineralBlockCrystallizationItem()
+			.setTextureName("super_world_gem_forge_mod:MixedMineralCrystallization")
+			.setUnlocalizedName("MixedMineralBlockCrystallization")
+			.setMaxStackSize(4)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item MonsterBlockCrystallization = new LoadMonsterBlockCrystallizationItem()
+			.setTextureName("super_world_gem_forge_mod:MonsterBlockCrystallization")
+			.setUnlocalizedName("MonsterBlockCrystallization")
+			.setMaxStackSize(4)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	
+	
+	public static Item ArcticIceBall = new LoadArcticIceBallItem()
+			.setTextureName("super_world_gem_forge_mod:ArcticIceBall")
+			.setUnlocalizedName("ArcticIceBall")
+			.setMaxStackSize(8)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item DivineLightCream = new LoadDivineLightCreamItem()
+			.setTextureName("super_world_gem_forge_mod:DivineLightCream")
+			.setUnlocalizedName("DivineLightCream")
+			.setMaxStackSize(8)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item ExtremelyUnstableToxicLiquid = new LoadExtremelyUnstableToxicLiquid()
+			.setTextureName("super_world_gem_forge_mod:ExtremelyUnstableToxicLiquid")
+			.setUnlocalizedName("ExtremelyUnstableToxicLiquid")
+			.setMaxStackSize(16)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	public static Item SkeletonArchersSoul = new LoadSkeletonArchersSoulItem()
+			.setTextureName("super_world_gem_forge_mod:SkeletonArchresSoul")
+			.setUnlocalizedName("SkeletonArchersSoul")
+			.setMaxStackSize(32)
+			.setCreativeTab(CreativeTabs.tabMaterials)
+			.setMaxDamage(0);
+	
+	
 	
 	//Minecraft Games Use [Forge Mod Loader] to register these item objects
 	//Minecraft 游戏 使用[Forge Mod Loader]注册这些物品对象
 	public static void createItems() {
 		
-		GameRegistry.registerItem(SilverIngot = new LoadSilverIngotItem("SilverIngot"),"SilverIngot");
-		GameRegistry.registerItem(AluminiumIngot = new LoadAluminiumIngotItem("AluminiumIngot"),"AluminiumIngot");
-		GameRegistry.registerItem(CopperIngot = new LoadCopperIngotItem("CopperIngot"),"CopperIngot");
-		GameRegistry.registerItem(AtannumIngot = new LoadAtannumIngotItem("AtannumIngot"),"AtannumIngot");
-		GameRegistry.registerItem(TitaniumIngot = new LoadTitaniumIngotItem("TitaniumIngot"),"TitaniumIngot");
-		GameRegistry.registerItem(ZincIngot = new LoadZincIngotItem("ZincIngot"),"ZincIngot");
-		GameRegistry.registerItem(SuperWorldAlloyIngot = new LoadSuperWorldAlloyIngotItem("SuperWorldAlloyIngot"),"SuperWorldAlloyIngot");
+		GameRegistry.registerItem(SilverIngot, "SilverIngot");
+		GameRegistry.registerItem(AluminiumIngot, "AluminiumIngot");
+		GameRegistry.registerItem(CopperIngot, "CopperIngot");
+		GameRegistry.registerItem(AtannumIngot, "AtannumIngot");
+		GameRegistry.registerItem(TitaniumIngot, "TitaniumIngot");
+		GameRegistry.registerItem(ZincIngot, "ZincIngot");
+		GameRegistry.registerItem(SuperWorldAlloyIngot, "SuperWorldAlloyIngot");
 		
-		GameRegistry.registerItem(MixedMineralBlockCrystallization = new LoadMixedMineralBlockCrystallizationItem("MixedMineralBlockCrystallization"),"MixedMineralBlockCrystallization");
-		GameRegistry.registerItem(MonsterBlockCrystallization = new LoadMonsterBlockCrystallizationItem("MonsterBlockCrystallization"),"MonsterBlockCrystallization");
+		GameRegistry.registerItem(MixedMineralBlockCrystallization, "MixedMineralBlockCrystallization");
+		GameRegistry.registerItem(MonsterBlockCrystallization, "MonsterBlockCrystallization");
 		
-		GameRegistry.registerItem(ArcticIceBall = new LoadArcticIceBallItem("ArcticIceBall"),"ArcticIceBall");
-		GameRegistry.registerItem(DivineLightCream = new LoadDivineLightCreamItem("DivineLightCream"),"DivineLightCream");
-		GameRegistry.registerItem(ExtremelyUnstableToxicLiquid = new LoadExtremelyUnstableToxicLiquid("ExtremelyUnstableToxicLiquid"),"ExtremelyUnstableToxicLiquid");
-		GameRegistry.registerItem(SkeletonArchersSoul = new LoadSkeletonArchersSoulItem("SkeletonArchersSoul"),"SkeletonArchersSoul");
+		GameRegistry.registerItem(ArcticIceBall, "ArcticIceBall");
+		GameRegistry.registerItem(DivineLightCream, "DivineLightCream");
+		GameRegistry.registerItem(ExtremelyUnstableToxicLiquid, "ExtremelyUnstableToxicLiquid");
+		GameRegistry.registerItem(SkeletonArchersSoul, "SkeletonArchersSoul");
 		
 	}
 

@@ -15,7 +15,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 //import ClassData.TwilightMagical.MinecraftForgeMod.SuperWorldGem.tools.*;
 
-public class Tool_SuperWorldGemMod extends Item {
+public class Tool_SuperWorldGemMod {
 	
 	/*--------------------------------------------------------------------------------------------------------------------------------------------------------
 	 * EnumHelper.addToolMaterial(String name, int harvestLevel, int maxUses, float efficiency, float damage, int enchantability);

@@ -2,17 +2,27 @@ package twilight_magical.minecraft_forge_modding.super_world_gem;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.util.EnumHelper;
-import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ModProxyInterface;
-import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.PALCommonProxy;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.SidedProxy;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.*;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ModProxyInterface;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.PALCommonProxy;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.EventHooks;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.entity.MyMinecraftNukeEntity;
+
 
 /**
  * @author Minecraft Game This Modules Creator: Twilight_Magical
@@ -61,6 +71,25 @@ public class SuperWorldGemMod
 		@Mod.EventHandler
 		public void preInit(FMLPreInitializationEvent modsEvent) //Preparatory Initializing
 		{
+			//MinecraftForge.EVENT_BUS.register(new EventHooks());
+			//MinecraftForge.EVENT_BUS.register(EventHooks.class);
+
+			//FMLCommonHandler.instance().bus().register(EventHooks.class);
+	    	FMLCommonHandler.instance().bus().register(new EventHooks());
+	        
+	        /**
+	         * Register the mod entity type with FML
+
+	         * @param entityClass The entity class
+	         * @param entityName A unique name for the entity
+	         * @param id A mod specific ID for the entity
+	         * @param mod The mod
+	         * @param trackingRange The range at which MC will send tracking updates
+	         * @param updateFrequency The frequency of tracking updates
+	         * @param sendsVelocityUpdates Whether to send velocity information packets as well
+	         */
+	        EntityRegistry.registerModEntity(MyMinecraftNukeEntity.class, "MyMinecraftNukeEntity", 0, this, 64, 1, true);
+	        
 		    GameMod_SidedProxyClass.preInit();
 		}
 

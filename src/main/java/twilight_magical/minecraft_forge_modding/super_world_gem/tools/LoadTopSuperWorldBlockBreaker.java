@@ -3,10 +3,9 @@ package twilight_magical.minecraft_forge_modding.super_world_gem.tools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTool;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraft.item.Item.ToolMaterial;
-
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,7 +18,14 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 
 import net.minecraft.world.World;
 
@@ -84,8 +90,12 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 	
 	public static Item TopSuperWorldBlockBreaker = new ItemToolSuperWorldBlockBreaker(0.0f, SUPERWORLDTOPBLOCKBREAKER, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
 	
-	private static final ResourceLocation texture = new ResourceLocation("super_world_gem:textures/items/WorldBedrockTheDead.gif");
-
+	//private static final ResourceLocation textureLocation = new ResourceLocation("super_world_gem_forge_mod:textures/items/WorldBedrockTheDead.gif");
+	//TextureManager myTextureManager = Minecraft.getMinecraft().getTextureManager();
+	//IResourceManager myResourceManager = Minecraft.getMinecraft().getResourceManager();
+	//ITextureObject myITextureObject = myTextureManager.getTexture(textureLocation);
+	
+	
 	public static class ItemToolSuperWorldBlockBreaker extends ItemTool
 	{
 		public static Set<Block> BlocksEffectiveValue;
@@ -101,13 +111,135 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		//This tool efficiency on the proper material
 		protected final float eOnPM_Speed = 51200000.0F; //Can set public
 		protected float efficiencyOnProperMaterial = eOnPM_Speed; //Can set public
-		
+
+		/*
+		 * Living-tool state.
+		 *
+		 * The old design already tried to use reverse/overflow data to cross the
+		 * excavation boundary.  Keep that idea literal: this specific ItemStack owns
+		 * a harvest level which grows while it is pressing against negative hardness.
+		 * It starts at the original level 32 and doubles once per world tick until
+		 * Java int overflow really happens.  Overflow is remembered in NBT.
+		 */
+		private static final String NBT_LIVING_HARVEST_LEVEL = "SWG_LivingHarvestLevel";
+		private static final String NBT_LIVING_HARVEST_OVERFLOW = "SWG_LivingHarvestOverflow";
+		private static final String NBT_LIVING_HARVEST_LAST_TICK = "SWG_LivingHarvestLastTick";
+
+		/*
+		 * Once the level has really overflowed, negative hardness is no longer
+		 * accepted as an absolute stop for this tool.  We do NOT modify the Block.
+		 * We only replace the hardness value observed by ForgeHooks.blockStrength
+		 * for this one calculation.
+		 *
+		 * 27 * tool efficiency makes the post-boundary mining intentionally slow:
+		 * with the original 51,200,000 efficiency it is roughly one minute of
+		 * continuous vanilla mining before a hardness-boundary block breaks.
+		 */
+		private static final float HARDNESS_BOUNDARY_RESISTANCE_MULTIPLIER = 27.0F;
+
 		private HashMap<String, Integer> toolClasses = new HashMap<String, Integer>();
 		public String toolClass = "SPUERWORLDTOPBLOCKBREAKER";
 		
 		public float getThisEfficiencyOnProperMaterial()
 		{
 			return this.efficiencyOnProperMaterial;
+		}
+
+		private NBTTagCompound getOrCreateLivingToolTag(ItemStack stack)
+		{
+			if(stack.getTagCompound() == null)
+			{
+				stack.setTagCompound(new NBTTagCompound());
+			}
+			return stack.getTagCompound();
+		}
+
+		/**
+		 * Raw, private harvest level owned by this exact ItemStack.  This is not the
+		 * block's hardness and it is not the player's break speed.
+		 */
+		public int getLivingHarvestLevel(ItemStack stack)
+		{
+			NBTTagCompound tag = this.getOrCreateLivingToolTag(stack);
+			if(!tag.hasKey(NBT_LIVING_HARVEST_LEVEL))
+			{
+				tag.setInteger(NBT_LIVING_HARVEST_LEVEL, getThisToolHarvestLevel());
+			}
+			return tag.getInteger(NBT_LIVING_HARVEST_LEVEL);
+		}
+
+		public boolean hasLivingHarvestOverflowed(ItemStack stack)
+		{
+			NBTTagCompound tag = this.getOrCreateLivingToolTag(stack);
+			return tag.getBoolean(NBT_LIVING_HARVEST_OVERFLOW);
+		}
+
+		/**
+		 * Grow once per world tick.  The overflow is a real signed-int wrap:
+		 * 32 -> 64 -> ... -> 1073741824 -> -2147483648.
+		 */
+		private void growLivingHarvestLevel(ItemStack stack, World world)
+		{
+			NBTTagCompound tag = this.getOrCreateLivingToolTag(stack);
+
+			if(tag.getBoolean(NBT_LIVING_HARVEST_OVERFLOW))
+			{
+				return;
+			}
+
+			long now = world.getTotalWorldTime();
+			if(tag.hasKey(NBT_LIVING_HARVEST_LAST_TICK) && tag.getLong(NBT_LIVING_HARVEST_LAST_TICK) == now)
+			{
+				return;
+			}
+			tag.setLong(NBT_LIVING_HARVEST_LAST_TICK, now);
+
+			int currentLevel = this.getLivingHarvestLevel(stack);
+			int nextLevel = currentLevel << 1; // intentionally allow Java int overflow
+			tag.setInteger(NBT_LIVING_HARVEST_LEVEL, nextLevel);
+
+			if(currentLevel > 0 && nextLevel < 0)
+			{
+				tag.setBoolean(NBT_LIVING_HARVEST_OVERFLOW, true);
+			}
+		}
+
+		/**
+		 * Called only from the ForgeHooks hardness interception.
+		 *
+		 * The actual Block keeps its original hardness forever.  Bedrock still says
+		 * -1.0F when queried normally.  The living tool merely changes the value that
+		 * this single Forge block-strength calculation is allowed to observe.
+		 */
+		public float transformObservedHardness(ItemStack stack, Block block, EntityPlayer player, World world,
+				int x, int y, int z, float originalHardness)
+		{
+			if(originalHardness >= 0.0F)
+			{
+				return originalHardness;
+			}
+
+			// Preserve the old explicit "hardcore block" design instead of silently
+			// turning this item into a universal admin delete wand.
+			if(!allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue.contains(block))
+			{
+				return originalHardness;
+			}
+
+			this.growLivingHarvestLevel(stack, world);
+
+			if(!this.hasLivingHarvestOverflowed(stack))
+			{
+				return originalHardness;
+			}
+
+			float observedHardness = this.efficiencyOnProperMaterial * HARDNESS_BOUNDARY_RESISTANCE_MULTIPLIER;
+			if(Float.isNaN(observedHardness) || Float.isInfinite(observedHardness) || observedHardness <= 0.0F)
+			{
+				observedHardness = Float.MAX_VALUE;
+			}
+
+			return observedHardness;
 		}
 		
 		/**
@@ -129,8 +261,8 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		   //当前资源库名称：super_world_gem
 		   // 警告！ 资源库名称不能是大写字母！
 		   super(damageVsEntity, MATERIAL, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
-		   this.setTextureName("super_world_gem:WorldBedrockTheDead");
-		   this.setUnlocalizedName("TopSuperWorldBlockBreaker"); // unlocalizedName
+		   this.setTextureName("super_world_gem_forge_mod:WorldBedrockTheDead_Animated");
+		   this.setUnlocalizedName("TopSuperWorldBlockBreaker");
 		   
 		   //Add this object object to multiple tool properties. And convert it to a tool object.
 		   //将这个物品对象，添加多个工具属性。并转换为工具物品对象。
@@ -291,7 +423,7 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 			}
 			
 			return myToolEfficiency != 0.0f ? myToolEfficiency : this.getThisEfficiencyOnProperMaterial();
-	    		
+			
 		}
 		
 		/**
@@ -343,29 +475,23 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		@Override
 		public int getHarvestLevel(ItemStack stack, String toolClass)
 		{
-			int level = this.getMetadata(stack);
-			Integer default_level = null;
-			
-			if (level == 0 && toolClass != null && toolClass.equals(this.toolClass))
+			if(toolClass != null && this.getToolClasses(stack).contains(toolClass))
 			{
-				default_level = toolClasses.get(toolClass);
-				return (level == 0 || default_level == null) ? -1 : default_level;
+				/*
+				 * Keep the overflow state private to the living tool.  Vanilla/Forge uses
+				 * negative harvest levels as "not this tool type", so after the real int
+				 * overflow we expose Integer.MAX_VALUE to the ordinary harvest-level API
+				 * while retaining Integer.MIN_VALUE + the overflow flag in ItemStack NBT.
+				 */
+				if(this.hasLivingHarvestOverflowed(stack))
+				{
+					return Integer.MAX_VALUE;
+				}
+
+				return this.getLivingHarvestLevel(stack);
 			}
-			else if (level == -1 && toolClass != null && toolClass.equals(this.toolClass))
-			{
-				return level;
-			}
-			else if (level < -1 && toolClass != null && toolClass.equals(this.toolClass))
-			{
-				return this.thisToolMaterial.getHarvestLevel();
-			}
-			else if (level > 0 && toolClass != null && toolClass.equals(this.toolClass))
-			{
-				return level;
-			}
-			
+
 			return super.getHarvestLevel(stack, toolClass);
-			
 		}
 		
 		@Override
@@ -421,105 +547,15 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		@Override
 		public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int positionX, int positionY, int positionZ, int length, float a, float b, float c)
 		{
-			//super.onItemUse(itemstack, player, world, positionX, positionY, positionZ, length, a, b, c);
-			
-			Block look_this_block = world.getBlock(positionX, positionY, positionZ);
-			Item set_item = this.getItemFromBlock(look_this_block);
-			
-			//是否已获得物品 ？
-			//Has it been obtained item ?
-			boolean isObtained = false;
-			
-			//Block block = Blocks.bedrock;
-			//Block block1 = Block.air;
-			
-			 
-			 if (!world.isRemote) //boolean value is true of result from client, boolean value is false of result from server
-			 {
-				if(world.blockExists(positionX, positionY, positionZ) == true)
-				{
-					/**
-					 * Sets a block to 0 and notifies relevant systems with the block change  Args: x, y, z
-					 **/
-				
-					if(player instanceof EntityPlayer)
-					{
-						//Forced use of air blocks to replace bedrock
-						//强制使用空气方块替换基岩
-						//world.setBlockToAir(positionX, positionY, positionZ);
-						
-				     	//Gives players who use this tool to add a one (bedrock) block item to inventory
-				     	//给予使用这个工具的玩家，向库存增加一个(基岩)块物品
-						if(look_this_block == Blocks.bedrock)
-						{
-							
-							if (isObtained == false)
-							{
-								isObtained = true;
-								player.inventory.addItemStackToInventory(new ItemStack(Blocks.bedrock, 1));
-							}
-							
-							world.setBlockToAir(positionX, positionY, positionZ);
-						}
-						
-						if(look_this_block == Blocks.obsidian)
-						{
-							
-							if (isObtained == false)
-							{
-								player.inventory.addItemStackToInventory(new ItemStack(Blocks.obsidian, 1));
-								isObtained = true;
-							}
-							
-							world.setBlockToAir(positionX, positionY, positionZ);
-						}
-						
-						if(look_this_block == Blocks.command_block)
-						{
-							
-							if (isObtained == false)
-							{
-								player.inventory.addItemStackToInventory(new ItemStack(Blocks.command_block, 1));
-								isObtained = true;
-							}
-							
-							world.setBlockToAir(positionX, positionY, positionZ);
-						}
-						
-						if(look_this_block == Blocks.dragon_egg)
-						{			
-							
-							if (isObtained == false)
-							{
-								player.inventory.addItemStackToInventory(new ItemStack(Blocks.dragon_egg, 1));
-								isObtained = true;
-							}
-							
-							world.setBlockToAir(positionX, positionY, positionZ);
-						}
-						
-			     		if(look_this_block != Blocks.air)
-			     		{
-			     			
-			     			if (isObtained == false)
-							{
-			     				player.inventory.addItemStackToInventory(new ItemStack(set_item, 1));
-			     				isObtained = true;
-							}
-			     			
-			     			world.setBlockToAir(positionX, positionY, positionZ);
-			     		}
-			     		//world.setBlock(positionX, positionY, positionZ, block1);
-			     		itemstack.damageItem(1, player); //Reset the this tool number of using
-			     		return true;
-					}
-				}
-				else
-				{
-					return false;
-				}
-			 }
-			 return super.onItemUse(itemstack, player, world, positionX, positionY, positionZ, length, a, b, c);
+			/*
+			 * Legacy versions of this tool used right-click + world.setBlockToAir() as
+			 * a fallback.  Do not do that anymore: it bypasses the entire mining model.
+			 *
+			 * Returning false leaves the block untouched.  The new behaviour lives in
+			 * the normal LEFT-CLICK mining path through ForgeHooks.blockStrength().
+			 * The original implementation is preserved verbatim under /legacy_original.
+			 */
+			return false;
 		}
 		
 		

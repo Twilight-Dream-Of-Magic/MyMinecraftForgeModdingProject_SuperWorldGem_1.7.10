@@ -12,11 +12,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.armors.Armor_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.blocks.Block_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.crafts.Crafts_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.items.Item_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.client_only.ClientOnlyFunctionalUtility;
 import twilight_magical.minecraft_forge_modding.super_world_gem.tools.Tool_SuperWorldGemMod;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,6 +47,7 @@ public class ComplexClientProxy extends PALCommonProxy {
 		Item_SuperWorldGemMod.createItems();
 		Block_SuperWorldGemMod.createBlocks();
 		Tool_SuperWorldGemMod.createItemTools();
+		Armor_SuperWorldGemMod.createItemArmors();
 		//ClientRegisterItem.loadingRegistered_CustomTexture_Locations();
 	}
 

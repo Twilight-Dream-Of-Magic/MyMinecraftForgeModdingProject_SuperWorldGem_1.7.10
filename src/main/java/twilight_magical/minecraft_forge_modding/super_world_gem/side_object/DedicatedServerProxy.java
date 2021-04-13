@@ -2,7 +2,9 @@ package twilight_magical.minecraft_forge_modding.super_world_gem.side_object;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.server_only.ServerOnlyModuleUtility;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

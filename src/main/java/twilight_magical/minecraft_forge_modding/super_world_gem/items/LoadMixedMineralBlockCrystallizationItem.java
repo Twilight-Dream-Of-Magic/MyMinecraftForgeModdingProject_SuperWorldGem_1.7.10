@@ -5,12 +5,8 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LoadMixedMineralBlockCrystallizationItem extends Item {
 	
-	public LoadMixedMineralBlockCrystallizationItem(String unlocalizedName) {
+	public LoadMixedMineralBlockCrystallizationItem() {
 		super();
-		this.setTextureName("super_world_gem_forge_mod:MixedMineralCrystallization");
-		this.setUnlocalizedName(unlocalizedName);
-		this.setMaxStackSize(4);
-		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
 }

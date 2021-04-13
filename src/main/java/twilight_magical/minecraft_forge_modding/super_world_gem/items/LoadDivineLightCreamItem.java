@@ -6,12 +6,8 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LoadDivineLightCreamItem extends Item {
 	
-	public  LoadDivineLightCreamItem(String unlocalizedName) {
+	public LoadDivineLightCreamItem() {
 		super();
-		this.setTextureName("super_world_gem_forge_mod:DivineLightCream");
-		this.setUnlocalizedName(unlocalizedName);
-		this.setMaxStackSize(8);
-		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
 }

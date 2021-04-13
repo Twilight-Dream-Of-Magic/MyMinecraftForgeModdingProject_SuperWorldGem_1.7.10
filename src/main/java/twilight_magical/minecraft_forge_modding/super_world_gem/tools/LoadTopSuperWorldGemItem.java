@@ -49,6 +49,7 @@ public class LoadTopSuperWorldGemItem extends ItemTool
 		this.setMaxDamage(0); //Set the maximum durability, the 0 value is never damaged 设置最大耐久度,值为0的话即为永不损坏
 	}
 	
+	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
 		list.add("My master");
 		list.add("You are already a god!");
