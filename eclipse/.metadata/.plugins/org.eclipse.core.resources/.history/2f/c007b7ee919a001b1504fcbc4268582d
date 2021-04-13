@@ -1,0 +1,114 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+
+import net.minecraftforge.common.util.EnumHelper;
+
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+
+import cpw.mods.fml.common.SidedProxy;
+
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import net.minecraft.src.*;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ModProxyInterface;
+import twilight_magical.minecraft_forge_modding.super_world_gem.side_object.PALCommonProxy;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.EventHooks;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.entity.MyMinecraftNukeEntity;
+
+
+/**
+ * @author Minecraft Game This Modules Creator: Twilight_Magical
+ */
+
+@Mod(modid = SuperWorldGemMod.MODID, version = SuperWorldGemMod.VERSION, useMetadata = true, acceptedMinecraftVersions = SuperWorldGemMod.ACCEPTED_MINECRAFT_VERSIONS) //useMetadata = true | Enable To Read mcmod.info File
+public class SuperWorldGemMod
+{
+	public static final String MODID = "super_world_gem_forge_mod";
+	public static final String VERSION = "Overall Rewrite";
+	public static final String ACCEPTED_MINECRAFT_VERSIONS = "1.7.10";
+	public static final String MOD_NAME = "SuperWorldGemForgeMod";
+	public static final String CLIENT_PROXY_CLASS = "twilight_magical.minecraft_forge_modding.super_world_gem.side_object.ComplexClientProxy";
+	public static final String SERVER_PROXY_CLASS = "twilight_magical.minecraft_forge_modding.super_world_gem.side_object.DedicatedServerProxy";
+	
+   /*
+    * Minecraft [Forge Mod Loader] Initialization this mod and create mod instance.
+    * Minecraft [Forge Mod Loader] 初始化这个Mod和创建Mod实例
+	*/
+	@Mod.Instance(value = SuperWorldGemMod.MODID)
+	public static SuperWorldGemMod MOD_INSTANCE;
+	
+   /*
+    * Minecraft [Forge Mod Loader] For local clients and network servers
+    * GameMod_SidedProxyClass is initialized with ComplexClientProxy and DedicatedServerProxy respectively
+    * Minecraft[Forge Mod Loader] 对于本地客户端和网络服务端
+    * GameMod_SidedProxyClass 分别用 ComplexClientProxy 和 DedicatedServerProxy 进行初始化
+    */
+	@SidedProxy(clientSide = SuperWorldGemMod.CLIENT_PROXY_CLASS , serverSide = SuperWorldGemMod.SERVER_PROXY_CLASS)
+	//PAL = 物理与逻辑
+	//PAL = Physical And Logic
+	public static PALCommonProxy GameMod_SidedProxyClass;
+	public static ModProxyInterface modproxy;
+		    
+       /* 
+        * When loading Mod, the order of execution for all three methods is Preparatory Initialize(preInit)，Initialize(init)，Post-Initialize(postInit).
+        * 加载Mod时，所有三个方法的执行顺序是Preparatory Initialize(preInit = 准备初始化)，Initialize(init = 初始化)，Post-Initialize(postInit = 最后初始化)。
+        */
+		   
+		/*Event Handler 事件管理器 */
+		
+	   /*
+		* preInit function is mainly used to read the local configuration, create boxes, items, etc. and register them.
+		* preInit 函数主要用于读取本地配置，创建方块，物品等并注册他们
+		*/
+		@Mod.EventHandler
+		public void preInit(FMLPreInitializationEvent modsEvent) //Preparatory Initializing
+		{
+			//MinecraftForge.EVENT_BUS.register(new EventHooks());
+	        FMLCommonHandler.instance().bus().register(new EventHooks());
+	        
+	        /**
+	         * Register the mod entity type with FML
+
+	         * @param entityClass The entity class
+	         * @param entityName A unique name for the entity
+	         * @param id A mod specific ID for the entity
+	         * @param mod The mod
+	         * @param trackingRange The range at which MC will send tracking updates
+	         * @param updateFrequency The frequency of tracking updates
+	         * @param sendsVelocityUpdates Whether to send velocity information packets as well
+	         */
+	        EntityRegistry.registerModEntity(MyMinecraftNukeEntity.class, "MyMinecraftNukeEntity", 0, this, 64, 1, true);
+	        
+		    GameMod_SidedProxyClass.preInit();
+		}
+
+       /*
+		* The init function is mainly used to build some of our custom data types, register custom synthesis methods, and other operations   
+        * init 函数主要用于构建我们的一些自定义数据类型，注册自定义合成方法和其他操作
+		*/
+		@Mod.EventHandler
+		public void init(FMLInitializationEvent modsEvent) //Initializing
+		{
+		    GameMod_SidedProxyClass.init();
+		}
+
+       /*
+        * The postInit function interacts with other Minecraft Forge Mod classes or functions and eventually our Minecraft Forge Mod is finished loading
+        * postInit 函数与其他的 Minecraft Forge Mod 类或函数交互，用于最后完成我们的 Minecraft Forge Mod 的加载
+		*/
+		@Mod.EventHandler
+		public void postInit(FMLPostInitializationEvent modsEvent) //Later Initializing (Post-Initializing)
+		{
+		    GameMod_SidedProxyClass.postInit();
+		}
+	
+}

@@ -1,0 +1,36 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.armors;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.world.World;
+import net.minecraft.creativetab.CreativeTabs;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.armors.Armor_SuperWorldGemMod.EntityEquipmentSlot;
+
+public class LoadMinecraftBedrockArmor extends ItemArmor {
+
+	public LoadMinecraftBedrockArmor(ArmorMaterial MATERIAL, int render_index, EntityEquipmentSlot armorSolt, Item customCraftingMaterial) {
+		super(MATERIAL, render_index, armorSolt.getIndex());
+
+		this.setMaxStackSize(1);
+		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setMaxDamage(0);
+		MATERIAL.customCraftingMaterial = customCraftingMaterial;
+	}
+	
+	@Override
+	public String getArmorTexture(ItemStack itemStack, Entity entity, int inventorySlotIndex, String type)
+	{
+		if (this.armorType == 2)
+		{
+			return "super_world_gem_forge_mod:textures/models/armor/MinecraftGemBedrockArmor_layer_2.png";
+		}
+		return "super_world_gem_forge_mod:textures/models/armor/MinecraftGemBedrockArmor_layer_1.png";
+	}
+
+}

@@ -1,0 +1,245 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.explode;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entityExploder.entityExploder;
+import net.minecraft.init.Blocks;
+
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.ExplosionEvent;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.entityExploder.MyMinecraftNukeentityExploder;
+import twilight_magical.minecraft_forge_modding.super_world_gem.util.MyMathHelper;
+
+public class MyMinecraftNukeExplosion extends Abstract_MyMinecraftExplode {
+	
+	private MyMinecraftNukeExplosion entityExploderExploder;
+	
+	
+	public Map func_77277_b()
+	{
+		return this.field_77288_k;
+	}
+	  
+	public EntityLivingBase getExplosivePlacedBy()
+	{
+		return (this.exploder == null) ? null : ((this.exploder instanceof EntityTNTx500Primed) ? ((EntityTNTx500Primed)this.exploder).func_94083_c() : ((this.exploder instanceof EntityLivingBase) ? (EntityLivingBase)this.exploder : null));
+	}
+
+	/*
+	public MyMinecraftNukeExplosion(World thisWorldObj, double x, double y, double z, int explosionPowerLevel, MyMinecraftNukeentityExploder thisentityExploder) {
+		this.thisWorldObj = thisWorldObj;
+		this.positionX = x;
+		this.positionY = y;
+		this.positionZ = z;
+		this.power = explosionPowerLevel;
+		this.entityExploder = thisentityExploder;
+		this.random = new Random();
+		this.radius = MyMathHelper.getRadiusFromPower(power);
+		this.x = MyMathHelper.reciprocalNumber(radius);
+		this.y = MyMathHelper.reciprocalNumber(radius);
+		this.z = MyMathHelper.reciprocalNumber(radius);
+	}
+	
+	public void progress()
+	{
+		System.out.println("Currently exploding .....");
+		
+		int blocks_count = 0;
+		int blocks_PerTick = this.getBlocksPerTick();
+		
+		this.setExploded(false);
+		
+		while(blocks_count <= blocks_PerTick && this.hasExploded() == false)
+		{
+			String numberText = String.valueOf(blocks_count);
+			String numberText2 = String.valueOf(blocks_PerTick);
+			
+			if (!Minecraft.getMinecraft().isSingleplayer())
+			{
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A72 World destruction time with progressing, Now is " + numberText + " of the " + numberText2);
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A74 You can't be respawn now!");
+			}
+			
+			if(x <= radius && y <= radius && z <= radius)
+			{
+				this.execute(x, y, z);
+				blocks_count++;
+				z++;
+			}
+			else if(z > radius)
+			{
+				z = MyMathHelper.reciprocalNumber(radius);
+				y++;
+			}
+			else if(y > radius)
+			{
+				y = MyMathHelper.reciprocalNumber(radius);
+				x++;
+			}
+			else if(x > radius)
+			{
+				this.setExploded(true);
+				break;
+			}
+			else
+			{
+				//DIVIDE BY CHEESE
+			}
+
+		}
+	}
+
+	private void execute(int x, int y, int z)
+	{
+		int absDistance = MyMathHelper.getDistance(x, y, z);
+		Block thisBlock = thisWorldObj.getBlock((int)(x + positionX), (int)(y + positionY), (int)(z + positionZ));
+		
+		restart:
+		for(int countMain = (this.power / 2); countMain != 0; countMain -= 1)
+		{
+			if(countMain == 0)
+			{
+				return;
+			}
+			
+			// int min = 0
+			// int max = 16
+			int randomMathSeed = random.nextInt(16) % (16 - 0 + 1) + 0;
+			
+			float minimumBlockExplosionResistance = power - (absDistance * 2) - randomMathSeed;
+			float thisBlockExplosionResistance = thisBlock.getExplosionResistance(entityExploder);
+			
+			if(thisBlockExplosionResistance >= 0 && minimumBlockExplosionResistance < 0)
+			{
+				minimumBlockExplosionResistance = 0 + (MyMathHelper.reciprocalNumber(minimumBlockExplosionResistance));
+			}
+			
+			int countMinor = 0;
+			while (thisBlockExplosionResistance <= minimumBlockExplosionResistance)
+			{
+				// int min = 0
+				// int max = 64
+				int randomSeed_X = random.nextInt(64) % (64 - 0 + 1) + 0;
+				int randomSeed_Y = random.nextInt(64) % (64 - 0 + 1) + 0;
+				int randomSeed_Z = random.nextInt(64) % (64 - 0 + 1) + 0;
+				
+				if(minimumBlockExplosionResistance == 0 || countMinor == (this.power / 4))
+				{
+					continue restart;
+				}
+				
+				//System.out.println("Explosion executing .....");
+				
+				int randomSeedX_Sqrt = MyMathHelper.mySqrt(randomSeed_X);
+				int randomSeedY_Sqrt = MyMathHelper.mySqrt(randomSeed_Y);
+				int randomSeedZ_Sqrt = MyMathHelper.mySqrt(randomSeed_Z);
+				
+				double a1, a2, a3;
+				a1 = x + positionX;
+				a2 = y + positionY;
+				a3 = z + positionZ;
+				double a4, a5, a6;
+				a4 = x - positionX;
+				a5 = y - positionY;
+				a6 = z - positionZ;
+				double a7, a8, a9;
+				a7 = positionX - x;
+				a8 = positionY - y;
+				a9 = positionZ - z;
+				
+				double b1, b2, b3;
+				b1 = (x - randomSeed_X) + positionX;
+				b2 = (y - randomSeed_Y) + positionY;
+				b3 = (z - randomSeed_Z) + positionZ;
+				double b4, b5, b6;
+				b4 = x - (randomSeed_X + positionX);
+				b5 = y - (randomSeed_Y + positionY);
+				b6 = z - (randomSeed_Z + positionZ);
+				double b7, b8, b9;
+				b7 = randomSeed_X + (positionX - x);
+				b8 = randomSeed_Y + (positionY - y);
+				b9 = randomSeed_Z + (positionZ - z);
+				double b10, b11, b12;
+				b10 = (x + randomSeed_X) - positionX;
+				b11 = (y + randomSeed_Y) - positionY;
+				b12 = (z + randomSeed_Z) - positionZ;
+				
+				double c1, c2, c3;
+				c1 = ( randomSeedX_Sqrt + randomSeedY_Sqrt ) * ( Math.PI * positionX - x );
+				c2 = ( randomSeedY_Sqrt + randomSeedZ_Sqrt ) * ( Math.PI * positionY - y );
+				c3 = ( randomSeedX_Sqrt + randomSeedZ_Sqrt ) * ( Math.PI * positionZ - z );
+				double c4, c5, c6;
+				c4 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * ( Math.PI * positionX - x );
+				c5 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionY - y );
+				c6 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionZ - z );
+				double c7, c8, c9;
+				c7 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX - x ) );
+				c8 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY - y ) );
+				c9 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ - z ) );
+				double c10, c11, c12;
+				c10 = ( randomSeedX_Sqrt + randomSeedY_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX - x ) );
+				c11 = ( randomSeedY_Sqrt + randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY - y ) );
+				c12 = ( randomSeedX_Sqrt + randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ - z ) );
+				double c13, c14, c15;
+				c13 = ( randomSeedX_Sqrt - randomSeedY_Sqrt ) * ( Math.PI * positionX + x );
+				c14 = ( randomSeedY_Sqrt -randomSeedZ_Sqrt ) * ( Math.PI * positionY + y );
+				c15 = ( randomSeedX_Sqrt - randomSeedZ_Sqrt ) * ( Math.PI * positionZ + z );
+				double c16, c17, c18;
+				c16 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * ( Math.PI * positionX + x );
+				c17 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionY + y );
+				c18 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionZ + z );
+				double c19, c20, c21;
+				c19 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX + x ) );
+				c20 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY + y ) );
+				c21 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ + z ) );
+				double c22, c23, c24;
+				c22 = ( randomSeedX_Sqrt - randomSeedY_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX + x ) );
+				c23 = ( randomSeedY_Sqrt - randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY + y ) );
+				c24 = ( randomSeedX_Sqrt - randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ + z ) );
+				
+				thisWorldObj.setBlock((int) a1, (int) a2, (int) a3, Blocks.air);
+				thisWorldObj.setBlock((int) a4, (int) a5, (int) a6, Blocks.air);
+				thisWorldObj.setBlock((int) a7, (int) a8, (int) a9, Blocks.air);
+				
+				thisWorldObj.setBlock((int) b1, (int) b2, (int) b3, Blocks.air);
+				thisWorldObj.setBlock((int) b4, (int) b5, (int) b6, Blocks.air);
+				thisWorldObj.setBlock((int) b7, (int) b8, (int) b9, Blocks.air);
+				thisWorldObj.setBlock((int) b10, (int) b11, (int) b12, Blocks.air);
+				
+				thisWorldObj.setBlock((int) c1, (int) c2, (int) c3, Blocks.air);
+				thisWorldObj.setBlock((int) c4, (int) c5, (int) c6, Blocks.air);
+				thisWorldObj.setBlock((int) c7, (int) c8, (int) c9, Blocks.air);
+				thisWorldObj.setBlock((int) c10, (int) c11, (int) c12, Blocks.air);
+				thisWorldObj.setBlock((int) c13, (int) c14, (int) c15, Blocks.air);
+				thisWorldObj.setBlock((int) c16, (int) c17, (int) c18, Blocks.air);
+				thisWorldObj.setBlock((int) c19, (int) c20, (int) c21, Blocks.air);
+				thisWorldObj.setBlock((int) c22, (int) c23, (int) c24, Blocks.air);
+				
+				if(minimumBlockExplosionResistance % 4.0F == 0.0F)
+				{
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance / 8) - (random.nextInt(16) % (16 - 8 + 1) + 8);
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance + 4) * (random.nextInt(8) % (16 - 0 + 1) + 0);
+				}
+				else
+				{
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance * 2) + (random.nextInt(8) % (16 - 0 + 1) + 0);
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance - 16) / (random.nextInt(16) % (16 - 2 + 1) + 2);
+				}
+				
+				countMinor += 1;
+			}
+		}
+	}
+	*/
+	
+	//MinecraftForge.EVENT_BUS.post(new ExplosionEvent.Detonate(this.thisWorldObj, new Explosion(thisWorldObj, entityExploder, positionX, positionY, positionZ, power), (List<entityExploder>) entityExploder));
+	
+
+}

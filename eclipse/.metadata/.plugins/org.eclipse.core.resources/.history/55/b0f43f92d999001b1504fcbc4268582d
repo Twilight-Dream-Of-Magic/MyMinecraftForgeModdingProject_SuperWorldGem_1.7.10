@@ -1,0 +1,49 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.armors;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+
+import net.minecraft.world.World;
+
+import net.minecraft.creativetab.CreativeTabs;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+
+public class LoadSuperWorldGemArmor extends ItemArmor {
+
+	public LoadSuperWorldGemArmor(ArmorMaterial MATERIAL, int render_index, int armorType){
+		super(MATERIAL, render_index, armorType);
+		
+		this.setMaxStackSize(1);
+		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setMaxDamage(0);
+	}
+	
+	@Override
+	public String getArmorTexture(ItemStack itemStack, Entity entity, int slot, String type)
+	{
+		if (this.armorType == 2)
+		{
+			return "aluminiummod:textures/models/armor/aluminium_layer_2.png";
+		}
+		return "aluminiummod:textures/models/armor/aluminium_layer_1.png";
+	}
+	
+	/**
+     * Called to tick armor in the armor slot. Override to do something
+     *
+     * @param world
+     * @param player
+     * @param itemStack
+     */
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+	{
+		int PositionX = (int) player.posX;
+		int PositionY = (int) player.posY;
+		int PositionZ = (int) player.posZ;
+	}
+
+}

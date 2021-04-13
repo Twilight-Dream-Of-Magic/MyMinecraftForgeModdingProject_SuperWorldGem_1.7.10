@@ -5,12 +5,8 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LoadAluminiumIngotItem extends Item {
 	
-	public LoadAluminiumIngotItem(String unlocalizedName) {
+	public LoadAluminiumIngotItem() {
 		super();
-		this.setTextureName("super_world_gem_forge_mod:(Al) Aluminium Ingot - [SuperWorldGemMod]");
-		this.setUnlocalizedName(unlocalizedName);
-		this.setMaxStackSize(64);
-		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
 }

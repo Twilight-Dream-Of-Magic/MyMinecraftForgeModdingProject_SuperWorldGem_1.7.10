@@ -1,0 +1,16 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.creativetab.CreativeTabs;
+
+
+public class LoadArcticIceBallItem extends Item {
+	
+	public LoadArcticIceBallItem() {
+		super();
+		this.setMaxStackSize(8);
+		this.setCreativeTab(CreativeTabs.tabMaterials);
+		this.setMaxDamage(0);
+    }
+
+}

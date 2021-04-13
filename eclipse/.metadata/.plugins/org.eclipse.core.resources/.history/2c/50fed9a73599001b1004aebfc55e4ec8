@@ -1,0 +1,16 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.creativetab.CreativeTabs;
+
+public class LoadCopperIngotItem extends Item {
+	
+	public LoadCopperIngotItem() {
+	
+	super();
+	this.setMaxStackSize(64);
+	this.setCreativeTab(CreativeTabs.tabMaterials);
+	this.setMaxDamage(0);
+	}
+
+}

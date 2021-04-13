@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
     <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME" stamp="1534509167434"/>
-    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\bin" stamp="1534509105908"/>
     <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\jre" stamp="1534509106688"/>
-    <entry loc="E:\Eclipse\jee-2021-03-R-win32-x86_64\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955" stamp="1617704427864"/>
-    <entry loc="E:\Java\SE Development Kit\Version 8\Windows 64\JAVA_HOME\jre\bin" stamp="1534509106551"/>
     <entry loc="E:\Eclipse\jee-2021-03-R-win32-x86_64\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955\jre" stamp="1617704427092"/>
 </dirs>

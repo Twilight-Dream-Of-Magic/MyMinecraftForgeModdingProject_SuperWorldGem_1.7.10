@@ -5,12 +5,7 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LoadExtremelyUnstableToxicLiquid extends Item {
 	
-	public  LoadExtremelyUnstableToxicLiquid(String unlocalizedName) {
+	public LoadExtremelyUnstableToxicLiquid() {
 		super();
-		this.setTextureName("super_world_gem_forge_mod:ExtremelyUnstableToxicLiquid");
-		this.setUnlocalizedName(unlocalizedName);
-		this.setMaxStackSize(16);
-		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
-
 }

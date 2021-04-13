@@ -1,12 +1,12 @@
 {
     "parent": "block/cube",
     "textures": {
-        "up": "super_world_gem:blocks/MixedMineralBlock",
-		"down": "super_world_gem:blocks/MixedMineralBlock",
-		"north": "super_world_gem:blocks/MixedMineralBlock",
-		"east": "super_world_gem:blocks/MixedMineralBlock",
-		"south": "super_world_gem:blocks/MixedMineralBlock",
-		"west": "super_world_gem:blocks/MixedMineralBlock",
-		"particle": "super_world_gem:blocks/MixedMineralBlock"
+        "up": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"down": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"north": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"east": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"south": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"west": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock",
+		"particle": "super_world_gem_forge_mod_forge_mod:blocks/MixedMineralBlock"
     }
 }

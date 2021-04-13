@@ -4,25 +4,36 @@ import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
+
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+
 import net.minecraft.potion.PotionEffect;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.Entity;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentProtection;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.Minecraft;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTNT;
+
+//import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +45,10 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.SideOnly;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.EventHooks;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.entity.MyMinecraftNukeEntity;
 
 public class LoadUnstableNuke extends Block {
 	
@@ -52,7 +64,7 @@ public class LoadUnstableNuke extends Block {
 	}
 
 	public LoadUnstableNuke(String unlocalizedName, float hardness, float resistance) {
-	    this(unlocalizedName, Material.rock, hardness, resistance);
+		this(unlocalizedName, Material.rock, hardness, resistance);
 
 	}
 	
@@ -81,6 +93,113 @@ public class LoadUnstableNuke extends Block {
 	double positionZ;
 	float explosionStrength;
 	
+	/*****
+
+	 //Example of an minecraft world explosion function prototype
+
+	 public Explosion createExplosion(Entity entityIn, double x, double y, double z, float strength, boolean isSmoking)
+	 {
+		 return this.newExplosion(entityIn, x, y, z, strength, false, isSmoking);
+	 }
+	
+	 public Explosion newExplosion(Entity entityIn, double x, double y, double z, float strength, boolean isFlaming, boolean isSmoking)
+	 {
+		 Explosion explosion = new Explosion(this, entityIn, x, y, z, strength, isFlaming, isSmoking);
+		 if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this, explosion)) return explosion;
+		 explosion.doExplosionA();
+		 explosion.doExplosionB(true);
+		 return explosion;
+	 }
+	
+	*****/
+	
+	/*
+	// Creates an explosion. Argument: entity, x, y, z, strength
+	public Explosion createExplosion(Entity theTriggeringEntity, double positionX, double positionY, double positionZ, float explosionStrength, boolean isSmokingValue)
+	{
+		return this.newExplosion(theTriggeringEntity, positionX, positionY, positionZ, explosionStrength, true, isSmokingValue);
+	}
+
+	// returns a new explosion. Does initiation (at time of making Explosion is not finished)
+	Explosion explosionInterface = new Explosion(thisWorldObject, theTriggeringEntity, positionX, positionY, positionZ, explosionStrength);
+	
+	public Explosion newExplosion(Entity theTriggeringEntity, double positionX, double positionY, double positionZ, float explosionStrength, boolean isFlamingValue, boolean isSmokingValue)
+	{
+		// isFlaming <-> Whether the impact is on fire.
+		// 影响是否着火
+		explosionInterface.isFlaming = isFlamingValue;
+		// isSmoking <-> Affect whether to generate particles and destroy squares.
+		// 影响是否生成粒子和破坏方块
+		explosionInterface.isSmoking = isSmokingValue;
+		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(thisWorldObject, explosionInterface))
+			return explosionInterface;
+
+		// The first stage, the calculation of the broken box, the damage to the entity.
+		// 第一阶段，计算被破坏的方块，伤害实体
+		explosionInterface.doExplosionA();
+		// The second stage, the destruction of the box, the formation of particle
+		// effects and falling objects.
+		// 第二阶段，破坏方块，生成粒子效果和掉落物
+		explosionInterface.doExplosionB(true);
+		return explosionInterface;
+	}
+	*/
+	
+	/*
+	public static class MyExplosion extends Explosion {
+
+		private World worldObj;
+
+		public MyExplosion(World thisWorldObject, Entity entity, double positionX, double positionY, double positionZ, float explosionPowerLevel) {
+			super(thisWorldObject, entity, positionX, positionY, positionZ, explosionPowerLevel);
+
+			this.worldObj = thisWorldObject;
+			this.exploder = entity;
+			this.explosionSize = explosionPowerLevel;
+			this.explosionX = positionX;
+			this.explosionY = positionY;
+			this.explosionZ = positionZ;
+		}
+		
+		@Override
+		public void doExplosionA()
+		{
+			
+		}
+		
+		
+	
+		//Does the second part of the explosion (sound, particles, drop spawn)
+		@Override
+		public void doExplosionB(boolean p_77279_1_)
+		{
+			
+		}
+		
+		
+		//Returns either the entity that placed the explosive block, the entity that caused the explosion or null.
+		public EntityLivingBase getExplosivePlacedBy()
+		{
+			return this.exploder == null ? null : (this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed)this.exploder).getTntPlacedBy() : (this.exploder instanceof EntityLivingBase ? (EntityLivingBase)this.exploder : null));
+		}
+		
+	}
+	*/
+	
+	
+	//Setup variable to exploding
+	public static int myNukeFuseTime = 128;
+	public static float myNukeExplodeForce = 110F;
+	public static boolean myNukeExplodeDropsBlocks;
+	public static int myNukeExplodeSmoothness = 200;
+	public static double myNukeDamage;
+	
+	//@Override
+	public int positionXsProvidingStrongPower(IBlockAccess particular1_IBlockAccess, int particular2_posX, int particular3_posY, int particular4_posZ, int particular5)
+	{
+		return redstonePower ? 1 : 0;
+	}
+	
 	@Override
 	public void onBlockAdded(World thisWorldObject, int positionX, int positionY, int positionZ)
 	{
@@ -91,389 +210,454 @@ public class LoadUnstableNuke extends Block {
 			int le = MathHelper.floor_double((double) (entity.rotationYaw * 4.0F / 320.0F) + 0.5D) & 3;
 			thisWorldObject.setBlockMetadataWithNotify(positionX, positionY, positionZ, le, 2);
 		}
+		if(thisWorldObject.isBlockIndirectlyGettingPowered(positionX, positionY, positionZ))
+        {
+            this.onBlockDestroyedByPlayer(thisWorldObject, positionX, positionY, positionZ, 1);
+            thisWorldObject.setBlockToAir(positionX, positionY, positionZ);
+        }
 
 		thisWorldObject.scheduleBlockUpdate(positionX, positionY, positionZ, this, this.tickRate(thisWorldObject));
 
 	}
 
-	//@Override
-	public int positionXsProvidingStrongPower(IBlockAccess particular1_IBlockAccess, int particular2_posX, int particular3_posY, int particular4_posZ, int particular5)
-	{
-		return redstonePower ? 1 : 0;
-	}
-	
-	/*****
-
-     //Example of an explosion function prototype
-
-     public Explosion createExplosion(Entity entityIn, double x, double y, double z, float strength, boolean isSmoking)
-     {
-         return this.newExplosion(entityIn, x, y, z, strength, false, isSmoking);
-     }
-    
-     public Explosion newExplosion(Entity entityIn, double x, double y, double z, float strength, boolean isFlaming, boolean isSmoking)
-     {
-         Explosion explosion = new Explosion(this, entityIn, x, y, z, strength, isFlaming, isSmoking);
-         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(this, explosion)) return explosion;
-         explosion.doExplosionA();
-         explosion.doExplosionB(true);
-         return explosion;
-     }
-	
-	*****/
-	
-	//Creates an explosion. Argument: entity, x, y, z, strength
-	public Explosion createExplosion(Entity theTriggeringEntity, double positionX, double positionY, double positionZ, float explosionStrength, boolean isSmokingValue)
-    {
-         return this.newExplosion(theTriggeringEntity, positionX, positionY, positionZ, explosionStrength, true, isSmokingValue);
-    }
-
-	//returns a new explosion. Does initiation (at time of writing Explosion is not finished)
-	Explosion explosionInterface = new Explosion(thisWorldObject, theTriggeringEntity, positionX, positionY, positionZ, explosionStrength);
-	public Explosion newExplosion(Entity theTriggeringEntity, double positionX, double positionY, double positionZ, float explosionStrength, boolean isFlamingValue, boolean isSmokingValue)
-	{
-		// isFlaming <-> Whether the impact is on fire. 
-		// 影响是否着火
-		explosionInterface.isFlaming = isFlamingValue;
-	    // isSmoking <-> Affect whether to generate particles and destroy squares. 
-		// 影响是否生成粒子和破坏方块
-		explosionInterface.isSmoking = isSmokingValue;
-		if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(thisWorldObject, explosionInterface)) return explosionInterface;
-		
-		// The first stage, the calculation of the broken box, the damage to the entity. 
-		// 第一阶段，计算被破坏的方块，伤害实体
-		explosionInterface.doExplosionA();
-		// The second stage, the destruction of the box, the formation of particle effects and falling objects. 
-		// 第二阶段，破坏方块，生成粒子效果和掉落物
-		explosionInterface.doExplosionB(true);
-		return explosionInterface;
-	}
-
 	@Override
-	public void onNeighborBlockChange(World thisWorldObject, int positionX, int positionY, int positionZ, Block l)
+	public void onNeighborBlockChange(World thisWorldObject, int positionX, int positionY, int positionZ, Block block)
 	{
-		EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer entity_player = Minecraft.getMinecraft().thePlayer;
 		
-		if (Block.getIdFromBlock(l) > 0 && l.canProvidePower() && thisWorldObject.isBlockIndirectlyGettingPowered(positionX, positionY, positionZ)) 
+		if (Block.getIdFromBlock(block) > 0 && block.canProvidePower() && thisWorldObject.isBlockIndirectlyGettingPowered(positionX, positionY, positionZ)) 
 		{
-			
-			if (!Minecraft.getMinecraft().isSingleplayer())
+			if (!thisWorldObject.isRemote)
 			{
-			    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hi Players, I am Twilight_Magical, the author of SuperWorldGem's Mod.");
-			    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7c Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
+				this.onBlockDestroyedByPlayer(thisWorldObject, positionX, positionY, positionZ, 1);
+				thisWorldObject.setBlockToAir(positionX, positionY, positionZ);
+				//MinecraftForge.EVENT_BUS.register(entitytntprimed);
+				//FMLCommonHandler.instance().bus().register(entitytntprimed);
 			}
 			
-			//Explosion explosionInterface = new Explosion(world, entity, positionX, positionY, positionZ, 32768F);
-			//explosionInterface.doExplosionA();
-			//explosionInterface.doExplosionB(true);
-			
-		    if(true)
-			{
-				long Time_Control_Of_Explosion_Number;
-				
-				for(Time_Control_Of_Explosion_Number = 0;Time_Control_Of_Explosion_Number <= 3600;Time_Control_Of_Explosion_Number++)
-				{
-					if(Time_Control_Of_Explosion_Number == 0)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 2F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 240)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 480)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 780)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 960)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 1200)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 64F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 1440)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 128F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 1680)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 256F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 1920)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 512F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 2160)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 1024F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 2400)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 2048F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 2640)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4096F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 2880)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8192F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 3120)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16384F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 3360)
-					{
-						thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32768F, true);
-					}
-					if(Time_Control_Of_Explosion_Number == 3600)
-					{
-						thisWorldObject.newExplosion((Entity) null, positionX, positionY, positionZ, 65536F, true, true);
-					}
-				}
-			}
-				
-			entity.attackEntityFrom(DamageSource.generic, 16392);
-			entity.attackEntityFrom(DamageSource.outOfWorld, 8192);
-			entity.attackEntityFrom(DamageSource.onFire, 4096);
-			DamageSource.setExplosionSource(explosionInterface);
-
-		}
-	}
-
-	@Override
-	public void onBlockDestroyedByPlayer(World thisWorldObject, int positionX, int positionY, int positionZ, int l)
-	{
-	  EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
-	  
-	    if (!Minecraft.getMinecraft().isSingleplayer())
-		{
-		    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hi Players, I am Twlilght_Yujiang, the author of SuperWorldGem's Mod.");
-		    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7c Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
-		}
-	  
-	    if(true)
-		{
+			/*
 			long Time_Control_Of_Explosion_Number;
-			
-			for(Time_Control_Of_Explosion_Number = 0;Time_Control_Of_Explosion_Number <= 3600;Time_Control_Of_Explosion_Number++)
+
+			for (Time_Control_Of_Explosion_Number = 0; Time_Control_Of_Explosion_Number <= 3600; Time_Control_Of_Explosion_Number++) 
 			{
-				if(Time_Control_Of_Explosion_Number == 0)
+				if (Time_Control_Of_Explosion_Number == 0) 
 				{
-					this.createExplosion((Entity) null, positionX, positionY, positionZ, 2F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 240)
+				if (Time_Control_Of_Explosion_Number == 240) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 480)
+				if (Time_Control_Of_Explosion_Number == 480) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 780)
+				if (Time_Control_Of_Explosion_Number == 780) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 960)
+				if (Time_Control_Of_Explosion_Number == 960) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 1200)
+				if (Time_Control_Of_Explosion_Number == 1200) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 64F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 64F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 1440)
+				if (Time_Control_Of_Explosion_Number == 1440) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 128F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 128F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 1680)
+				if (Time_Control_Of_Explosion_Number == 1680) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 256F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 256F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 1920)
+				if (Time_Control_Of_Explosion_Number == 1920) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 512F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 512F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 2160)
+				if (Time_Control_Of_Explosion_Number == 2160) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 1024F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 1024F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 2400)
+				if (Time_Control_Of_Explosion_Number == 2400) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 2048F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2048F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 2640)
+				if (Time_Control_Of_Explosion_Number == 2640) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4096F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4096F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 2880)
+				if (Time_Control_Of_Explosion_Number == 2880) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8192F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8192F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 3120)
+				if (Time_Control_Of_Explosion_Number == 3120) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16384F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16384F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 3360)
+				if (Time_Control_Of_Explosion_Number == 3360) 
 				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32768F, true);
+					this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32768F, true);
 				}
-				if(Time_Control_Of_Explosion_Number == 3600)
+				if (Time_Control_Of_Explosion_Number == 3600) 
 				{
-					thisWorldObject.newExplosion((Entity) null, positionX, positionY, positionZ, 65536F, true, true);
+					this.newExplosion((Entity) entity_player, positionX, positionY, positionZ, 65536F, true, true);
 				}
 			}
+			*/
 		}
-	  
-	    entity.attackEntityFrom(DamageSource.generic, 16392);
-		entity.attackEntityFrom(DamageSource.outOfWorld, 8192);
-		entity.attackEntityFrom(DamageSource.onFire, 4096);
-	    DamageSource.setExplosionSource(explosionInterface);
+	}
+	
+	@Override
+	public int quantityDropped(Random par1Random)
+	{
+		return 1;
+	}
+	
+	/**
+	 * Called right before the block is destroyed by a player.	Args: world, x, y, z, metaData
+	 */
+	@Override
+	public void onBlockDestroyedByPlayer(World thisWorldObject, int positionX, int positionY, int positionZ, int metaData)
+	{
+		EntityPlayer entity_player = Minecraft.getMinecraft().thePlayer;
+		
+		if (!Minecraft.getMinecraft().isSingleplayer())
+		{
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hello " + entity_player.getDisplayName() + " , I am Twilight_Magical, the author of SuperWorldGem's Mod.");
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7e Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
+		}
+		
+		if (!thisWorldObject.isRemote)
+		{
+			//this.func_150114_a(thisWorldObject, positionX, positionY, positionZ, metaData, (EntityLivingBase)null);
+			MyMinecraftNukeEntity entitytntprimed = new MyMinecraftNukeEntity(thisWorldObject, (double)((float)positionX + 0.5F), (double)((float)positionY + 0.5F), (double)((float)positionZ + 0.5F), (EntityLivingBase)entity_player);
+			entitytntprimed.setNukeFuse(256);
+			thisWorldObject.spawnEntityInWorld(entitytntprimed);
+			thisWorldObject.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
+			
+			//MinecraftForge.EVENT_BUS.register(entitytntprimed);
+			//FMLCommonHandler.instance().bus().register(entitytntprimed);
+		}
+		
+		/*
+		long Time_Control_Of_Explosion_Number;
 
+		for (Time_Control_Of_Explosion_Number = 0; Time_Control_Of_Explosion_Number <= 3600; Time_Control_Of_Explosion_Number++) 
+		{
+			if (Time_Control_Of_Explosion_Number == 0) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 240) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 480) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 780) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 960) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1200) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 64F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1440) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 128F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1680) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 256F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1920) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 512F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2160) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 1024F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2400) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2048F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2640) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4096F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2880) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8192F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3120) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16384F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3360) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32768F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3600) 
+			{
+				this.newExplosion((Entity) entity_player, positionX, positionY, positionZ, 65536F, true, true);
+			}
+		}
+		*/
+	}
+	
+	public void suomonMyNukeEntity(World thisWorldObject, int positionX, int positionY, int positionZ, int metaData, EntityLivingBase entity_living_base)
+	{
+		EntityPlayer entity_player = Minecraft.getMinecraft().thePlayer;
+		
+		if (!Minecraft.getMinecraft().isSingleplayer())
+		{
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hello " + entity_player.getDisplayName() + " , I am Twilight_Magical, the author of SuperWorldGem's Mod.");
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7e Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
+		}
+		
+		if (!thisWorldObject.isRemote)
+		{
+			if ((metaData & 0x1) == 1)
+			{
+				MyMinecraftNukeEntity entitytntprimed = new MyMinecraftNukeEntity(thisWorldObject, (double)((float)positionX + 0.5F), (double)((float)positionY + 0.5F), (double)((float)positionZ + 0.5F), entity_living_base);
+				entitytntprimed.setNukeFuse(256);
+				thisWorldObject.spawnEntityInWorld(entitytntprimed);
+				thisWorldObject.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
+
+				//entity_player.attackEntityFrom(DamageSource.generic, 16392F);
+				//entity_player.attackEntityFrom(DamageSource.outOfWorld, 8192F);
+				//entity_player.attackEntityFrom(DamageSource.onFire, 4096F);
+				//entity_player.attackEntityFrom(DamageSource.fallingBlock, 2048F);
+				//DamageSource.setExplosionSource(explosionInterface);
+				
+				//MinecraftForge.EVENT_BUS.register(entitytntprimed);
+				//FMLCommonHandler.instance().bus().register(entitytntprimed);
+			}
+		}
 	}
 
 	@Override
 	public void onBlockDestroyedByExplosion(World thisWorldObject, int positionX, int positionY, int positionZ, Explosion explosion)
 	{
-	  EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
-	  
-	    if (!Minecraft.getMinecraft().isSingleplayer())
+		EntityPlayer entity_player = Minecraft.getMinecraft().thePlayer;
+		
+		if (!Minecraft.getMinecraft().isSingleplayer())
 		{
-		    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hi Players, I am Twlilght_Yujiang, the author of SuperWorldGem's Mod.");
-		    Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7c Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A76 Hello " + entity_player.getDisplayName() + " , I am Twilight_Magical, the author of SuperWorldGem's Mod.");
+			Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A7e Inevitable nuke bombs have been activated, it is very dangerous, then I wish you good luck ");
+		}
+		
+		if (!thisWorldObject.isRemote)
+		{
+			MyMinecraftNukeEntity entitytntprimed = new MyMinecraftNukeEntity(thisWorldObject, (double)((float)positionX + 0.5F), (double)((float)positionY + 0.5F), (double)((float)positionZ + 0.5F), explosion.getExplosivePlacedBy());
+			entitytntprimed.fuse = thisWorldObject.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8;
+			entitytntprimed.setNukeFuse(256);
+			thisWorldObject.spawnEntityInWorld(entitytntprimed);
+			thisWorldObject.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
+			
+			//entity_player.attackEntityFrom(DamageSource.generic, 16392F);
+			//entity_player.attackEntityFrom(DamageSource.outOfWorld, 8192F);
+			//entity_player.attackEntityFrom(DamageSource.onFire, 4096F);
+			//entity_player.attackEntityFrom(DamageSource.fallingBlock, 2048F);
+			//DamageSource.setExplosionSource(explosionInterface);
+			
+			//MinecraftForge.EVENT_BUS.register(entitytntprimed);
+			//FMLCommonHandler.instance().bus().register(entitytntprimed);
 		}
 	  
-	    if(true)
+		/*
+		long Time_Control_Of_Explosion_Number;
+
+		for (Time_Control_Of_Explosion_Number = 0; Time_Control_Of_Explosion_Number <= 3600; Time_Control_Of_Explosion_Number++) 
 		{
-			long Time_Control_Of_Explosion_Number;
-			
-			for(Time_Control_Of_Explosion_Number = 0;Time_Control_Of_Explosion_Number <= 3600;Time_Control_Of_Explosion_Number++)
+			if (Time_Control_Of_Explosion_Number == 0) 
 			{
-				if(Time_Control_Of_Explosion_Number == 0)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 2F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 240)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 480)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 780)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 960)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 1200)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 64F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 1440)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 128F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 1680)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 256F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 1920)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 512F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 2160)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 1024F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 2400)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 2048F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 2640)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 4096F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 2880)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 8192F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 3120)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 16384F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 3360)
-				{
-					thisWorldObject.createExplosion((Entity) null, positionX, positionY, positionZ, 32768F, true);
-				}
-				if(Time_Control_Of_Explosion_Number == 3600)
-				{
-					thisWorldObject.newExplosion((Entity) null, positionX, positionY, positionZ, 65536F, true, true);
-				}
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 240) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 480) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 780) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 960) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1200) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 64F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1440) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 128F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1680) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 256F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 1920) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 512F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2160) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 1024F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2400) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 2048F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2640) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 4096F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 2880) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 8192F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3120) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 16384F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3360) 
+			{
+				this.createExplosion((Entity) entity_player, positionX, positionY, positionZ, 32768F, true);
+			}
+			if (Time_Control_Of_Explosion_Number == 3600) 
+			{
+				this.newExplosion((Entity) entity_player, positionX, positionY, positionZ, 65536F, true, true);
 			}
 		}
-
-	    entity.attackEntityFrom(DamageSource.generic, 16392);
-		entity.attackEntityFrom(DamageSource.outOfWorld, 8192);
-		entity.attackEntityFrom(DamageSource.onFire, 4096);
-	    DamageSource.setExplosionSource(explosionInterface);
-
+		*/
+	}
+	
+	/**
+     * Called upon block activation (right click on the block.)
+     */
+	@Override
+	public boolean onBlockActivated(World thisWorldObject, int positionX, int positionY, int positionZ, EntityPlayer entity_player, int block_metadata, float par7, float par8, float par9) 
+	{
+		if (entity_player.getCurrentEquippedItem() != null && entity_player.getCurrentEquippedItem().getItem() == Items.flint_and_steel)
+		{
+			this.suomonMyNukeEntity(thisWorldObject, positionX, positionY, positionZ, 1, entity_player);
+			thisWorldObject.setBlockToAir(positionX, positionY, positionZ);
+			entity_player.getCurrentEquippedItem().damageItem(1, entity_player);
+			return true;
+		}
+		return super.onBlockActivated(thisWorldObject, positionX, positionY, positionZ, entity_player, block_metadata, par7, par8, par9);
 	}
 
 	@Override
 	public void onBlockClicked(World thisWorldObject, int positionX, int positionY, int positionZ, EntityPlayer theTriggeringEntity)
 	{
-
-	  if (theTriggeringEntity instanceof EntityLivingBase)
+		if (theTriggeringEntity instanceof EntityLivingBase)
+		{
 			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(20, 600, 2));
-
+		}
 	}
 
 	@Override
-	public int onBlockPlaced(World thisWorldObject, int positionX, int positionY, int positionZ, int l, float a, float b, float c, int d)
+	public int onBlockPlaced(World thisWorldObject, int positionX, int positionY, int positionZ, int side, float hitX, float hitY, float hitZ, int block_metadata)
 	{
-	  int returnValue = super.onBlockPlaced(thisWorldObject, positionX, positionY, positionZ, l, a, b, c, d);
-	  EntityPlayer theTriggeringEntity = Minecraft.getMinecraft().thePlayer;
+		int returnValue = super.onBlockPlaced(thisWorldObject, positionX, positionY, positionZ, side, hitX, hitY, hitZ, block_metadata);
+		EntityPlayer theTriggeringEntity = Minecraft.getMinecraft().thePlayer;
 
 		if (theTriggeringEntity instanceof EntityLivingBase)
-		      ((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(2, 3600000, 5));
+		{
+			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(2, 3600000, 5));
+		
+			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(9, 600, 2));
 
-		if (theTriggeringEntity instanceof EntityLivingBase)
-			  ((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(9, 600, 2));
-
-		if (theTriggeringEntity instanceof EntityLivingBase)
-		      ((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(20, 36000, 5));
+			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(20, 36000, 5));
+		}
 		  
 		return returnValue;
 	}
+	
+	/**
+	 * Called when the block is destroyed by an explosion.
+	 * Useful for allowing the block to take into account tile entities,
+	 * metadata, etc. when exploded, before it is removed.
+	 *
+	 * @param world The current world
+	 * @param x X Position
+	 * @param y Y Position
+	 * @param z Z Position
+	 * @param Explosion The explosion instance affecting the block
+	 */
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+	{
+		world.setBlockToAir(x, y, z);
+		onBlockDestroyedByExplosion(world, x, y, z, explosion);
+	}
+	
+	/**
+     * Return whether this block can drop from an explosion.
+     */
+	@Override
+    public boolean canDropFromExplosion(Explosion p_149659_1_)
+    {
+        return true;
+    }
 
+	/**
+	 * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
+	 */
 	@Override
 	public void onEntityCollidedWithBlock(World thisWorldObject, int positionX, int positionY, int positionZ, Entity theTriggeringEntity)
 	{
 		
-	  if (theTriggeringEntity instanceof EntityLivingBase)
+		if (theTriggeringEntity instanceof EntityLivingBase)
+		{
 			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(20, 3600000, 5));
 
-	  if (theTriggeringEntity instanceof EntityLivingBase)
 			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(2, 3600000, 5));
 			
-	  if (theTriggeringEntity instanceof EntityLivingBase)
 			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(9, 3600000, 2));
 
-	  if (theTriggeringEntity instanceof EntityLivingBase)
 			((EntityLivingBase) theTriggeringEntity).addPotionEffect(new PotionEffect(9, 360000, 5));
+		}
+		if (theTriggeringEntity instanceof EntityArrow && !thisWorldObject.isRemote)
+		{
+			EntityArrow entityarrow = (EntityArrow) theTriggeringEntity;
+
+			if (entityarrow.isBurning())
+			{
+				this.suomonMyNukeEntity(thisWorldObject, positionX, positionY, positionZ, 1, entityarrow.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase)entityarrow.shootingEntity : null);
+				thisWorldObject.setBlockToAir(positionX, positionY, positionZ);
+			}
+		}
 
 	}
+	
+	private IIcon side;
+    private IIcon top;
+    private IIcon bottom;
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(IIconRegister register){
+        side = register.registerIcon(this.getTextureName());
+        top = register.registerIcon(this.getTextureName());
+        bottom = register.registerIcon(this.getTextureName());
+    }
 	
 }
 

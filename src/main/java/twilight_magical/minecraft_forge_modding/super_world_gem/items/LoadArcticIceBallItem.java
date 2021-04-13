@@ -6,12 +6,8 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LoadArcticIceBallItem extends Item {
 	
-	public  LoadArcticIceBallItem(String unlocalizedName) {
+	public LoadArcticIceBallItem() {
 		super();
-		this.setTextureName("super_world_gem_forge_mod:ArcticIceBall");
-		this.setUnlocalizedName(unlocalizedName);
-		this.setMaxStackSize(8);
-		this.setCreativeTab(CreativeTabs.tabMaterials);
     }
 
 }

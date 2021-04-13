@@ -1,0 +1,128 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.armors;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+//import net.minecraft.inventory.Slot;
+import net.minecraftforge.common.util.EnumHelper;
+import twilight_magical.minecraft_forge_modding.super_world_gem.tools.Tool_SuperWorldGemMod;
+import net.minecraft.creativetab.CreativeTabs;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
+public class Armor_SuperWorldGemMod {
+	
+	public static ItemArmor.ArmorMaterial SuperWorldGemArmor = EnumHelper.addArmorMaterial("SUPERWORLDGEM_ARMOR", 5120, new int[]{300, 400, 200, 100}, 100);
+	public static ItemArmor.ArmorMaterial MinecraftBedrock_SuperWorldGemArmor = EnumHelper.addArmorMaterial("SUPERWORLDGEM_MINECRAFTBEDROCK_AROMR", 102400, new int[]{10240, 10240, 10240, 10240}, 100);
+	
+	public static int armorRendererPrefixID = RenderingRegistry.addNewArmourRendererPrefix("SUPERWORLDGEM_ARMOR");
+	public static int armorRendererPrefixID_2 = RenderingRegistry.addNewArmourRendererPrefix("SUPERWORLDGEM_MINECRAFTBEDROCK_AROMR");
+	
+	public static Item helmet_SuperWorldGemArmor;
+	public static Item corset_SuperWorldGemArmor;
+	public static Item leggings_SuperWorldGemArmor;
+	public static Item boots_SuperWorldGemArmor;
+	
+	public enum EntityEquipmentSlot
+	{
+		/*New minecraft version (1.7.10 +) */
+	    //MAINHAND(EntityEquipmentSlot.Type.HAND, 0, 0, "mainhand"),
+	    //OFFHAND(EntityEquipmentSlot.Type.HAND, 1, 5, "offhand"),
+	    //FEET(EntityEquipmentSlot.Type.ARMOR, 0, 1, "feet"),
+	    //LEGS(EntityEquipmentSlot.Type.ARMOR, 1, 2, "legs"),
+	    //CHEST(EntityEquipmentSlot.Type.ARMOR, 2, 3, "chest"),
+	    //HEAD(EntityEquipmentSlot.Type.ARMOR, 3, 4, "head");
+	    
+	    /*Old minecraft version (1.7.10 -) */
+	    FEET(EntityEquipmentSlot.Type.ARMOR, 3, 4, "feet"),
+	    LEGS(EntityEquipmentSlot.Type.ARMOR, 2, 3, "legs"),
+	    CHEST(EntityEquipmentSlot.Type.ARMOR, 1, 2, "chest"),
+	    HEAD(EntityEquipmentSlot.Type.ARMOR, 0, 1, "head");
+	 
+	    private final EntityEquipmentSlot.Type slotType;
+	    private final int index;
+	    private final int slotIndex;
+	    private final String name;
+	 
+	    private EntityEquipmentSlot(EntityEquipmentSlot.Type slotTypeArgs, int indexArgs, int slotIndexArgs, String nameArgs)
+	    {
+	        this.slotType = slotTypeArgs;
+	        this.index = indexArgs;
+	        this.slotIndex = slotIndexArgs;
+	        this.name = nameArgs;
+	    }
+	 
+	    public EntityEquipmentSlot.Type getSlotType()
+	    {
+	        return this.slotType;
+	    }
+	 
+	    public int getIndex()
+	    {
+	        return this.index;
+	    }
+	 
+	    /**
+	     * Gets the actual slot index.
+	     */
+	    public int getSlotIndex()
+	    {
+	        return this.slotIndex;
+	    }
+	 
+	    public String getName()
+	    {
+	        return this.name;
+	    }
+	 
+	    public static EntityEquipmentSlot fromString(String targetName)
+	    {
+	        for (EntityEquipmentSlot entityequipmentslot : values())
+	        {
+	            if (entityequipmentslot.getName().equals(targetName))
+	            {
+	                return entityequipmentslot;
+	            }
+	        }
+	 
+	        throw new IllegalArgumentException("Invalid slot \'" + targetName + "\'");
+	    }
+	 
+	    public static enum Type {
+	        HAND,
+	        ARMOR;
+	    }
+	}
+	
+	public static void createItemArmors() {
+		
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		{
+			helmet_SuperWorldGemArmor = new LoadSuperWorldGemArmor(SuperWorldGemArmor, armorRendererPrefixID, EntityEquipmentSlot.HEAD, Tool_SuperWorldGemMod.TopSuperWorldGemItem)
+					.setTextureName("super_world_gem_forge_mod:BasicStrongArmor_head")
+					.setUnlocalizedName("helmet_SuperWorldGemArmor");
+			
+			corset_SuperWorldGemArmor = new LoadSuperWorldGemArmor(SuperWorldGemArmor, armorRendererPrefixID, EntityEquipmentSlot.CHEST, Tool_SuperWorldGemMod.TopSuperWorldGemItem)
+					.setTextureName("super_world_gem_forge_mod:BasicStrongArmor_body")
+					.setUnlocalizedName("corset_SuperWorldGemArmor");
+			
+			leggings_SuperWorldGemArmor = new LoadSuperWorldGemArmor(SuperWorldGemArmor, armorRendererPrefixID, EntityEquipmentSlot.LEGS, Tool_SuperWorldGemMod.TopSuperWorldGemItem)
+					.setTextureName("super_world_gem_forge_mod:BasicStrongArmor_leggins")
+					.setUnlocalizedName("leggings_SuperWorldGemArmor");
+			
+			boots_SuperWorldGemArmor = new LoadSuperWorldGemArmor(SuperWorldGemArmor, armorRendererPrefixID, EntityEquipmentSlot.FEET, Tool_SuperWorldGemMod.TopSuperWorldGemItem)
+					.setTextureName("super_world_gem_forge_mod:BasicStrongArmor_boots")
+					.setUnlocalizedName("boots_SuperWorldGemArmor");
+		}
+		
+		GameRegistry.registerItem(helmet_SuperWorldGemArmor, "helmet_SuperWorldGemArmor");
+		GameRegistry.registerItem(corset_SuperWorldGemArmor, "chest_SuperWorldGemArmor");
+		GameRegistry.registerItem(leggings_SuperWorldGemArmor, "leggings_SuperWorldGemArmor");
+		GameRegistry.registerItem(boots_SuperWorldGemArmor, "boots_SuperWorldGemArmor");
+		
+	}
+
+}

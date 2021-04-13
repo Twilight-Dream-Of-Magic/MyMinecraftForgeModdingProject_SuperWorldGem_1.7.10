@@ -1,0 +1,384 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.explode;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.entity.MyMinecraftNukeEntity;
+import twilight_magical.minecraft_forge_modding.super_world_gem.util.MyMathHelper;
+
+public class MyMinecraftNukeExplosion extends Abstract_MyMinecraftExplode {
+	
+	private MyMinecraftNukeEntity entityExploder;
+	
+	@Override
+	public void doExplosionA()
+	{
+		float f = this.explosionSize;
+	    HashSet<ChunkPosition> hashset = new HashSet();
+	    int i;
+	    for (i = 0; i < this.field_77289_h; i++) {
+	      for (int m = 0; m < this.field_77289_h; m++) {
+	        for (int n = 0; n < this.field_77289_h; n++) {
+	          if (i == 0 || i == this.field_77289_h - 1 || m == 0 || m == this.field_77289_h - 1 || n == 0 || n == this.field_77289_h - 1) {
+	            double d3 = (i / (this.field_77289_h - 1.0F) * 2.0F - 1.0F);
+	            double d4 = (m / (this.field_77289_h - 1.0F) * 2.0F - 1.0F);
+	            double d5 = (n / (this.field_77289_h - 1.0F) * 2.0F - 1.0F);
+	            double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+	            d3 /= d6;
+	            d4 /= d6;
+	            d5 /= d6;
+	            float f1 = this.explosionSize * (0.7F + this.worldObj.rand.nextFloat() * 0.6F);
+	            double d0 = this.explosionX;
+	            double d1 = this.explosionY;
+	            double d2 = this.explosionZ;
+	            for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
+	              int l = MathHelper.floor_double(d0);
+	              int i1 = MathHelper.floor_double(d1);
+	              int j1 = MathHelper.floor_double(d2);
+	              Block block = this.worldObj.getBlock(l, i1, j1);
+	              if (block == Blocks.stone || block == Blocks.cobblestone || block == Blocks.coal_ore || block == Blocks.iron_ore || block == Blocks.gold_ore || block == Blocks.diamond_ore || block.getMaterial() == Material.rock) {
+	                float f3 = (this.exploder != null) ? this.exploder.func_145772_a(this.TNT, this.worldObj, l, i1, j1, block) : block.getExplosionResistance(this.exploder, this.worldObj, l, i1, j1, this.explosionX, this.explosionY, this.explosionZ);
+	                f1 -= (f3 - 1.7F) * f2;
+	              } 
+	              if (block.getMaterial() != Material.air && block != Blocks.stone && block != Blocks.cobblestone && block != Blocks.coal_ore && block != Blocks.iron_ore && block != Blocks.gold_ore && block != Blocks.diamond_ore && block.getMaterial() != Material.rock) {
+	                float f3 = (this.exploder != null) ? this.exploder.func_145772_a(this.TNT, this.worldObj, l, i1, j1, block) : block.getExplosionResistance(this.exploder, this.worldObj, l, i1, j1, this.explosionX, this.explosionY, this.explosionZ);
+	                f1 -= (f3 + 0.3F) * f2;
+	              } 
+	              if (f1 > 0.0F && (this.exploder == null || this.exploder.func_145774_a(this.TNT, this.worldObj, l, i1, j1, block, f1)))
+	                hashset.add(new ChunkPosition(l, i1, j1)); 
+	              d0 += d3 * f2;
+	              d1 += d4 * f2 * 1.5D;
+	              d2 += d5 * f2;
+	            } 
+	          } 
+	        } 
+	      } 
+	    } 
+	    this.affectedBlockPositions.addAll(hashset);
+	    this.explosionSize *= 2.0F;
+	    i = MathHelper.floor_double(this.explosionX - this.explosionSize - 1.0D);
+	    int j = MathHelper.floor_double(this.explosionX + this.explosionSize + 1.0D);
+	    int k = MathHelper.floor_double(this.explosionY - this.explosionSize - 1.0D);
+	    int l1 = MathHelper.floor_double(this.explosionY + this.explosionSize + 1.0D);
+	    int i2 = MathHelper.floor_double(this.explosionZ - this.explosionSize - 1.0D);
+	    int j2 = MathHelper.floor_double(this.explosionZ + this.explosionSize + 1.0D);
+	    List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, AxisAlignedBB.getBoundingBox(i, k, i2, j, l1, j2));
+	    Vec3 vec3 = Vec3.createVectorHelper(this.explosionX, this.explosionY, this.explosionZ);
+	    for (int k2 = 0; k2 < list.size(); k2++) {
+	      Entity entity = list.get(k2);
+	      double d7 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / this.explosionSize;
+	      if (d7 <= 1.0D) {
+	        double d0 = entity.posX - this.explosionX;
+	        double d1 = entity.posY + entity.getEyeHeight() - this.explosionY;
+	        double d2 = entity.posZ - this.explosionZ;
+	        double d8 = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+	        if (d8 != 0.0D) {
+	          d0 /= d8;
+	          d1 /= d8;
+	          d2 /= d8;
+	          double d9 = this.worldObj.getBlockDensity(vec3, entity.boundingBox);
+	          double d10 = (1.0D - d7) * d9;
+	          entity.attackEntityFrom(DamageSource.setExplosionSource(this.TNT), (int)((d10 * d10 + d10) / 2.0D / TooMuchTNT.TNTx500damage * 8.0D * this.explosionSize + 1.0D));
+	          double d11 = EnchantmentProtection.func_92092_a(entity, d10);
+	          entity.motionX += d0 * d11;
+	          entity.motionY += d1 * d11;
+	          entity.motionZ += d2 * d11;
+	          if (entity instanceof EntityPlayer)
+	            this.field_77288_k.put((EntityPlayer)entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10)); 
+	        } 
+	      } 
+	    } 
+	    this.explosionSize = f;
+	}
+	
+	@Override
+	public void doExplosionB()
+	{
+		this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+	    if (this.explosionSize >= 2.0F && this.isSmoking) {
+	      this.worldObj.spawnParticle("hugeexplosion", this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
+	    } else {
+	      this.worldObj.spawnParticle("largeexplode", this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
+	    } 
+	    if (this.isSmoking) {
+	      Iterator<ChunkPosition> iterator = this.affectedBlockPositions.iterator();
+	      while (iterator.hasNext()) {
+	        ChunkPosition chunkposition = iterator.next();
+	        int i = chunkposition.chunkPosX;
+	        int j = chunkposition.chunkPosY;
+	        int k = chunkposition.chunkPosZ;
+	        Block block = this.worldObj.getBlock(i, j, k);
+	        if (par1) {
+	          double d0 = (i + this.worldObj.rand.nextFloat());
+	          double d1 = (j + this.worldObj.rand.nextFloat());
+	          double d2 = (k + this.worldObj.rand.nextFloat());
+	          double d3 = d0 - this.explosionX;
+	          double d4 = d1 - this.explosionY;
+	          double d5 = d2 - this.explosionZ;
+	          double d6 = MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+	          d3 /= d6;
+	          d4 /= d6;
+	          d5 /= d6;
+	          double d7 = 0.5D / (d6 / this.explosionSize + 0.1D);
+	          d7 *= (this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
+	          d3 *= d7;
+	          d4 *= d7;
+	          d5 *= d7;
+	          this.worldObj.spawnParticle("explode", (d0 + this.explosionX * 1.0D) / 2.0D, (d1 + this.explosionY * 1.0D) / 2.0D, (d2 + this.explosionZ * 1.0D) / 2.0D, d3, d4, d5);
+	          this.worldObj.spawnParticle("smoke", d0, d1, d2, d3, d4, d5);
+	        } 
+	        if (block.getMaterial() != Material.air) {
+	          if (this.DropsBlocks && 
+	            block.canDropFromExplosion(this.TNT))
+	            block.dropBlockAsItemWithChance(this.worldObj, i, j, k, this.worldObj.getBlockMetadata(i, j, k), 1.0F / this.explosionSize, 0); 
+	          block.onBlockExploded(this.worldObj, i, j, k, this.TNT);
+	        } 
+	      } 
+	    } 
+	    if (this.isFlaming) {
+	      Iterator<ChunkPosition> iterator = this.affectedBlockPositions.iterator();
+	      while (iterator.hasNext()) {
+	        ChunkPosition chunkposition = iterator.next();
+	        int i = chunkposition.chunkPosX;
+	        int j = chunkposition.chunkPosY;
+	        int k = chunkposition.chunkPosZ;
+	        Block block = this.worldObj.getBlock(i, j, k);
+	        Block block1 = this.worldObj.getBlock(i, j - 1, k);
+	        if (block.getMaterial() == Material.air && block1.func_149730_j() && this.explosionRNG.nextInt(3) == 0)
+	          this.worldObj.setBlock(i, j, k, (Block)Blocks.fire); 
+	      } 
+	    } 
+	}
+	
+	public Map func_77277_b()
+	{
+		return this.field_77288_k;
+	}
+	  
+	public EntityLivingBase getExplosivePlacedBy()
+	{
+		return (this.exploder == null) ? null : ((this.exploder instanceof MyMinecraftNukeEntity) ? ((MyMinecraftNukeEntity)this.exploder).func_94083_c() : ((this.exploder instanceof EntityLivingBase) ? (EntityLivingBase)this.exploder : null));
+	}
+
+	/*
+	public MyMinecraftNukeExplosion(World thisWorldObj, double x, double y, double z, int explosionPowerLevel, MyMinecraftNukeentityExploder thisentityExploder) {
+		this.thisWorldObj = thisWorldObj;
+		this.positionX = x;
+		this.positionY = y;
+		this.positionZ = z;
+		this.power = explosionPowerLevel;
+		this.entityExploder = thisentityExploder;
+		this.random = new Random();
+		this.radius = MyMathHelper.getRadiusFromPower(power);
+		this.x = MyMathHelper.reciprocalNumber(radius);
+		this.y = MyMathHelper.reciprocalNumber(radius);
+		this.z = MyMathHelper.reciprocalNumber(radius);
+	}
+	
+	public void progress()
+	{
+		System.out.println("Currently exploding .....");
+		
+		int blocks_count = 0;
+		int blocks_PerTick = this.getBlocksPerTick();
+		
+		this.setExploded(false);
+		
+		while(blocks_count <= blocks_PerTick && this.hasExploded() == false)
+		{
+			String numberText = String.valueOf(blocks_count);
+			String numberText2 = String.valueOf(blocks_PerTick);
+			
+			if (!Minecraft.getMinecraft().isSingleplayer())
+			{
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A72 World destruction time with progressing, Now is " + numberText + " of the " + numberText2);
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("\u00A74 You can't be respawn now!");
+			}
+			
+			if(x <= radius && y <= radius && z <= radius)
+			{
+				this.execute(x, y, z);
+				blocks_count++;
+				z++;
+			}
+			else if(z > radius)
+			{
+				z = MyMathHelper.reciprocalNumber(radius);
+				y++;
+			}
+			else if(y > radius)
+			{
+				y = MyMathHelper.reciprocalNumber(radius);
+				x++;
+			}
+			else if(x > radius)
+			{
+				this.setExploded(true);
+				break;
+			}
+			else
+			{
+				//DIVIDE BY CHEESE
+			}
+
+		}
+	}
+
+	private void execute(int x, int y, int z)
+	{
+		int absDistance = MyMathHelper.getDistance(x, y, z);
+		Block thisBlock = thisWorldObj.getBlock((int)(x + positionX), (int)(y + positionY), (int)(z + positionZ));
+		
+		restart:
+		for(int countMain = (this.power / 2); countMain != 0; countMain -= 1)
+		{
+			if(countMain == 0)
+			{
+				return;
+			}
+			
+			// int min = 0
+			// int max = 16
+			int randomMathSeed = random.nextInt(16) % (16 - 0 + 1) + 0;
+			
+			float minimumBlockExplosionResistance = power - (absDistance * 2) - randomMathSeed;
+			float thisBlockExplosionResistance = thisBlock.getExplosionResistance(entityExploder);
+			
+			if(thisBlockExplosionResistance >= 0 && minimumBlockExplosionResistance < 0)
+			{
+				minimumBlockExplosionResistance = 0 + (MyMathHelper.reciprocalNumber(minimumBlockExplosionResistance));
+			}
+			
+			int countMinor = 0;
+			while (thisBlockExplosionResistance <= minimumBlockExplosionResistance)
+			{
+				// int min = 0
+				// int max = 64
+				int randomSeed_X = random.nextInt(64) % (64 - 0 + 1) + 0;
+				int randomSeed_Y = random.nextInt(64) % (64 - 0 + 1) + 0;
+				int randomSeed_Z = random.nextInt(64) % (64 - 0 + 1) + 0;
+				
+				if(minimumBlockExplosionResistance == 0 || countMinor == (this.power / 4))
+				{
+					continue restart;
+				}
+				
+				//System.out.println("Explosion executing .....");
+				
+				int randomSeedX_Sqrt = MyMathHelper.mySqrt(randomSeed_X);
+				int randomSeedY_Sqrt = MyMathHelper.mySqrt(randomSeed_Y);
+				int randomSeedZ_Sqrt = MyMathHelper.mySqrt(randomSeed_Z);
+				
+				double a1, a2, a3;
+				a1 = x + positionX;
+				a2 = y + positionY;
+				a3 = z + positionZ;
+				double a4, a5, a6;
+				a4 = x - positionX;
+				a5 = y - positionY;
+				a6 = z - positionZ;
+				double a7, a8, a9;
+				a7 = positionX - x;
+				a8 = positionY - y;
+				a9 = positionZ - z;
+				
+				double b1, b2, b3;
+				b1 = (x - randomSeed_X) + positionX;
+				b2 = (y - randomSeed_Y) + positionY;
+				b3 = (z - randomSeed_Z) + positionZ;
+				double b4, b5, b6;
+				b4 = x - (randomSeed_X + positionX);
+				b5 = y - (randomSeed_Y + positionY);
+				b6 = z - (randomSeed_Z + positionZ);
+				double b7, b8, b9;
+				b7 = randomSeed_X + (positionX - x);
+				b8 = randomSeed_Y + (positionY - y);
+				b9 = randomSeed_Z + (positionZ - z);
+				double b10, b11, b12;
+				b10 = (x + randomSeed_X) - positionX;
+				b11 = (y + randomSeed_Y) - positionY;
+				b12 = (z + randomSeed_Z) - positionZ;
+				
+				double c1, c2, c3;
+				c1 = ( randomSeedX_Sqrt + randomSeedY_Sqrt ) * ( Math.PI * positionX - x );
+				c2 = ( randomSeedY_Sqrt + randomSeedZ_Sqrt ) * ( Math.PI * positionY - y );
+				c3 = ( randomSeedX_Sqrt + randomSeedZ_Sqrt ) * ( Math.PI * positionZ - z );
+				double c4, c5, c6;
+				c4 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * ( Math.PI * positionX - x );
+				c5 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionY - y );
+				c6 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionZ - z );
+				double c7, c8, c9;
+				c7 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX - x ) );
+				c8 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY - y ) );
+				c9 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) + MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ - z ) );
+				double c10, c11, c12;
+				c10 = ( randomSeedX_Sqrt + randomSeedY_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX - x ) );
+				c11 = ( randomSeedY_Sqrt + randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY - y ) );
+				c12 = ( randomSeedX_Sqrt + randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ - z ) );
+				double c13, c14, c15;
+				c13 = ( randomSeedX_Sqrt - randomSeedY_Sqrt ) * ( Math.PI * positionX + x );
+				c14 = ( randomSeedY_Sqrt -randomSeedZ_Sqrt ) * ( Math.PI * positionY + y );
+				c15 = ( randomSeedX_Sqrt - randomSeedZ_Sqrt ) * ( Math.PI * positionZ + z );
+				double c16, c17, c18;
+				c16 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * ( Math.PI * positionX + x );
+				c17 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionY + y );
+				c18 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * ( Math.PI * positionZ + z );
+				double c19, c20, c21;
+				c19 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX + x ) );
+				c20 = ( MyMathHelper.reciprocalNumber(randomSeedY_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY + y ) );
+				c21 = ( MyMathHelper.reciprocalNumber(randomSeedX_Sqrt) - MyMathHelper.reciprocalNumber(randomSeedZ_Sqrt) ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ + z ) );
+				double c22, c23, c24;
+				c22 = ( randomSeedX_Sqrt - randomSeedY_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionX + x ) );
+				c23 = ( randomSeedY_Sqrt - randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionY + y ) );
+				c24 = ( randomSeedX_Sqrt - randomSeedZ_Sqrt ) * MyMathHelper.reciprocalNumber( ( Math.PI * positionZ + z ) );
+				
+				thisWorldObj.setBlock((int) a1, (int) a2, (int) a3, Blocks.air);
+				thisWorldObj.setBlock((int) a4, (int) a5, (int) a6, Blocks.air);
+				thisWorldObj.setBlock((int) a7, (int) a8, (int) a9, Blocks.air);
+				
+				thisWorldObj.setBlock((int) b1, (int) b2, (int) b3, Blocks.air);
+				thisWorldObj.setBlock((int) b4, (int) b5, (int) b6, Blocks.air);
+				thisWorldObj.setBlock((int) b7, (int) b8, (int) b9, Blocks.air);
+				thisWorldObj.setBlock((int) b10, (int) b11, (int) b12, Blocks.air);
+				
+				thisWorldObj.setBlock((int) c1, (int) c2, (int) c3, Blocks.air);
+				thisWorldObj.setBlock((int) c4, (int) c5, (int) c6, Blocks.air);
+				thisWorldObj.setBlock((int) c7, (int) c8, (int) c9, Blocks.air);
+				thisWorldObj.setBlock((int) c10, (int) c11, (int) c12, Blocks.air);
+				thisWorldObj.setBlock((int) c13, (int) c14, (int) c15, Blocks.air);
+				thisWorldObj.setBlock((int) c16, (int) c17, (int) c18, Blocks.air);
+				thisWorldObj.setBlock((int) c19, (int) c20, (int) c21, Blocks.air);
+				thisWorldObj.setBlock((int) c22, (int) c23, (int) c24, Blocks.air);
+				
+				if(minimumBlockExplosionResistance % 4.0F == 0.0F)
+				{
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance / 8) - (random.nextInt(16) % (16 - 8 + 1) + 8);
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance + 4) * (random.nextInt(8) % (16 - 0 + 1) + 0);
+				}
+				else
+				{
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance * 2) + (random.nextInt(8) % (16 - 0 + 1) + 0);
+					minimumBlockExplosionResistance = (minimumBlockExplosionResistance - 16) / (random.nextInt(16) % (16 - 2 + 1) + 2);
+				}
+				
+				countMinor += 1;
+			}
+		}
+	}
+	*/
+	
+	//MinecraftForge.EVENT_BUS.post(new ExplosionEvent.Detonate(this.thisWorldObj, new Explosion(thisWorldObj, entityExploder, positionX, positionY, positionZ, power), (List<entityExploder>) entityExploder));
+	
+
+}

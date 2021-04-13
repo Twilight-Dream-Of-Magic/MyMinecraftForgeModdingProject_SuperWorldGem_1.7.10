@@ -1,0 +1,39 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.util;
+
+public class MyMathHelper {
+	
+	public static int getDistance(int xd, int yd, int zd)
+	{
+        int a = Math.abs( mySqrt(xd) + mySqrt(yd) + mySqrt(zd) );
+        return (int) Math.abs( Math.sqrt(a) );
+    }
+
+    public static int mySqrt(int a)
+    {
+        return a * a;
+    }
+
+    public static int getRadiusFromPower(int power)
+    {
+        int b = mySqrt(power) / 3;
+        return (int) Math.abs( Math.sqrt(b) );
+    }
+    
+    public static int reciprocalNumber(int number)
+    {
+    	return ~number;
+    }
+    
+    public static float reciprocalNumber(float number)
+    {
+    	return -number;
+    }
+
+    
+    public static double reciprocalNumber(double number)
+    {
+    	return -number;
+    }
+
+
+}

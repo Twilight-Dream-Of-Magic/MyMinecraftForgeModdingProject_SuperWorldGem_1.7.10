@@ -6,8 +6,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraft.item.Item.ToolMaterial;
 
-import net.minecraft.util.ResourceLocation;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -19,7 +17,14 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 
 import net.minecraft.world.World;
 
@@ -84,8 +89,12 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 	
 	public static Item TopSuperWorldBlockBreaker = new ItemToolSuperWorldBlockBreaker(0.0f, SUPERWORLDTOPBLOCKBREAKER, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
 	
-	private static final ResourceLocation texture = new ResourceLocation("super_world_gem:textures/items/WorldBedrockTheDead.gif");
-
+	//private static final ResourceLocation textureLocation = new ResourceLocation("super_world_gem_forge_mod:textures/items/WorldBedrockTheDead.gif");
+	//TextureManager myTextureManager = Minecraft.getMinecraft().getTextureManager();
+	//IResourceManager myResourceManager = Minecraft.getMinecraft().getResourceManager();
+	//ITextureObject myITextureObject = myTextureManager.getTexture(textureLocation);
+	
+	
 	public static class ItemToolSuperWorldBlockBreaker extends ItemTool
 	{
 		public static Set<Block> BlocksEffectiveValue;
@@ -129,8 +138,8 @@ public class LoadTopSuperWorldBlockBreaker extends Item
 		   //当前资源库名称：super_world_gem
 		   // 警告！ 资源库名称不能是大写字母！
 		   super(damageVsEntity, MATERIAL, allowedPlayerHarvest_hardcoreBlocksEffectiveAgainstValue);
-		   this.setTextureName("super_world_gem:WorldBedrockTheDead");
-		   this.setUnlocalizedName("TopSuperWorldBlockBreaker"); // unlocalizedName
+		   this.setTextureName("super_world_gem_forge_mod:WorldBedrockTheDead_Animated");
+		   this.setUnlocalizedName("TopSuperWorldBlockBreaker");
 		   
 		   //Add this object object to multiple tool properties. And convert it to a tool object.
 		   //将这个物品对象，添加多个工具属性。并转换为工具物品对象。

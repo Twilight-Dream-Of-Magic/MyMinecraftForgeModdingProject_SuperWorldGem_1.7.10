@@ -1,0 +1,17 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.creativetab.CreativeTabs;
+
+public class LoadAluminiumIngotItem extends Item {
+	
+	public LoadAluminiumIngotItem(String unlocalizedName) {
+		super();
+		LoadAluminiumIngotItem ThisInstance = this;
+		ThisInstance.setTextureName("super_world_gem_forge_mod:(Al) Aluminium Ingot - [SuperWorldGemMod]");
+		ThisInstance.setUnlocalizedName(unlocalizedName);
+		ThisInstance.setMaxStackSize(64);
+		ThisInstance.setCreativeTab(CreativeTabs.tabMaterials);
+	}
+
+}

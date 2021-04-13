@@ -1,0 +1,82 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event;
+
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Event.HasResult;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.Cancelable;
+
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraft.world.World;
+
+import net.minecraft.util.DamageSource;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeExplosion;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeRegistry;
+
+import java.util.Iterator;
+
+public class EventHooks extends Event {
+	
+	/* Priority of event listeners, listeners will be sorted with respect to this priority level.
+	 * 
+	 * Note:
+	 * Due to using a ArrayList in the ListenerList,
+	 * these need to stay in a contiguous index starting at 0. {Default ordinal} 
+	 * //Event Priority Level
+	 * 
+	 * HIGHEST, //First to execute
+	 * HIGH,
+	 * NORMAL,
+	 * LOW,
+	 * LOWEST //Last to execute
+	 * */
+	
+	//@SubscribeEvent(priority = EventPriority.NORMAL|HIGHEST|HIGH|LOW|LOWEST, receiveCanceled = false|true)
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onServerTick(TickEvent.ServerTickEvent event)
+	{
+		if (MyMinecraftNukeRegistry.isExploding())
+		{
+			Iterator<MyMinecraftNukeExplosion> i = MyMinecraftNukeRegistry.getExplosions().iterator();
+			
+			System.out.println("The nuke explosion event started.");
+			while(i.hasNext() == true && event.isCanceled() == false)
+			{
+				MyMinecraftNukeExplosion explosion = i.next();
+				
+				if (explosion.hasExploded()) //true
+				{
+					event.setResult(Event.Result.DENY);
+					event.setCanceled(true);
+					event.getResult();
+				}
+				else //false
+				{
+					explosion.progress();
+				}
+			}
+			
+			if (event.isCanceled() == true)
+			{
+				System.out.println("Ending Nuking");
+				i.remove();
+				return;
+			}
+			
+			System.out.println("The nuke explosion event ended.");
+		}
+	}
+	
+	@SubscribeEvent 
+    public void onPlayerTick(PlayerTickEvent event)
+    { 
+       if(event.player.isWet())
+       { 
+    	   event.player.attackEntityFrom（DamageSource.drown，1.0F）; 
+       } 
+    }
+
+}

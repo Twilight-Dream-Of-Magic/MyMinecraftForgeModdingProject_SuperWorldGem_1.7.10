@@ -1,0 +1,5 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.explode;
+
+public class Abstract_MyMinecraftExplode {
+
+}

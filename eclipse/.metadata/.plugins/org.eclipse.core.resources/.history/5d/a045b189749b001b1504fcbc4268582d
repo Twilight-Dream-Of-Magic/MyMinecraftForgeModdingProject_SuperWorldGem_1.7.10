@@ -1,0 +1,99 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event;
+
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.Event.HasResult;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.Cancelable;
+
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraft.world.World;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeExplosion;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeRegistry;
+
+import java.util.Iterator;
+
+public class EventHooks extends Event {
+	
+	/* Priority of event listeners, listeners will be sorted with respect to this priority level.
+	 * 
+	 * Note:
+	 * Due to using a ArrayList in the ListenerList,
+	 * these need to stay in a contiguous index starting at 0. {Default ordinal} 
+	 * //Event Priority Level
+	 * 
+	 * HIGHEST, //First to execute
+	 * HIGH,
+	 * NORMAL,
+	 * LOW,
+	 * LOWEST //Last to execute
+	 * */
+	
+	//@SubscribeEvent(priority = EventPriority.NORMAL|HIGHEST|HIGH|LOW|LOWEST, receiveCanceled = false|true)
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onServerTick(TickEvent.ServerTickEvent event)
+	{
+		//My Nuke destorying block
+		if (event.side.isServer() == true && event.phase == event.phase.START && MyMinecraftNukeRegistry.isExploding())
+		{
+			
+			Iterator<MyMinecraftNukeExplosion> i = MyMinecraftNukeRegistry.getExplosions().iterator();
+			System.out.println("The nuke explosion event started.");
+			
+			while(i.hasNext() == true && event.isCanceled() == false)
+			{
+				MyMinecraftNukeExplosion explosion = i.next();
+				
+				if (explosion.hasExploded()) //true
+				{
+					event.setResult(Event.Result.DENY);
+					event.setCanceled(true);
+					event.getResult();
+				}
+				else //false
+				{
+					explosion.progress();
+				}
+			}
+			
+			if (event.phase == event.phase.END || event.isCanceled() == true)
+			{
+				System.out.println("Ending Nuking");
+				i.remove();
+				return;
+			}
+			
+			System.out.println("The nuke explosion event ended.");
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onPlayerTick(PlayerTickEvent event)
+    {
+		//My Nuke killing player and entity
+		if(event.player.isDead == false && event.phase == event.phase.START && event.side.isServer() == true && MyMinecraftNukeRegistry.isExploding())
+		{ 
+    	   event.player.attackEntityFrom(DamageSource.generic, 16392F);
+    	   event.player.attackEntityFrom(DamageSource.outOfWorld, 8192F);
+    	   event.player.attackEntityFrom(DamageSource.onFire, 4096F);
+    	   event.player.attackEntityFrom(DamageSource.fallingBlock, 2048F);
+    	   //event.player.setDead();
+    	   
+    	   if (event.phase == event.phase.END)
+    	   {
+    		   return;
+    	   }
+		} 
+	}
+
+}

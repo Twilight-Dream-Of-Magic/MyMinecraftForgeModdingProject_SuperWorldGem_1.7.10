@@ -1,0 +1,82 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.explode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.util.MyMathHelper;
+
+public abstract class Abstract_MyMinecraftExplode {
+
+	public boolean isFlaming = false;
+	public boolean isSmoking = true;
+	protected boolean DropsBlocks = nukeExplodeDropsBlocks;
+	protected int field_77289_h = nukeExplodeSmoothness;
+	protected Random explosionRNG = new Random();
+	protected World thisWorldObj;
+	protected double explosionX;
+	protected double explosionY;
+	protected double explosionZ;
+	protected Entity exploder;
+	protected float explosionSize;
+	public List affectedBlockPositions = new ArrayList();
+	protected Map field_77288_k = new HashMap<Object, Object>();
+	protected Explosion TNT;
+	
+	public void doExplosionA()
+	{
+		
+	}
+	
+	public void doExplosionB()
+	{
+		
+	}
+	
+	/*
+	protected World thisWorldObj;
+    protected double positionX;
+    protected double positionY;
+    protected double positionZ;
+    protected int power;
+    protected int radius;
+    protected Random random;
+    protected boolean hasExploded = false;
+    protected int x;
+    protected int y;
+    protected int z;
+
+    public abstract void progress();
+    
+    public void setExploded(boolean flag)
+    {
+    	this.hasExploded = flag;
+    }
+
+    public int getBlocksPerTick()
+    {
+        double result = ( (this.power * MyMathHelper.getRadiusFromPower(power)) / (50 * (this.power / 2) + (MyMathHelper.getRadiusFromPower(power) / 2) ) ) * 20000;
+        if(result == 0)
+        {
+        	if(result < 0)
+        	{
+        		return (int) MyMathHelper.reciprocalNumber(result);
+        	}
+        	return 10000;
+        }
+        return (int)result;
+    }
+
+    public boolean hasExploded()
+    {
+        return this.hasExploded;
+    }
+    */
+
+}

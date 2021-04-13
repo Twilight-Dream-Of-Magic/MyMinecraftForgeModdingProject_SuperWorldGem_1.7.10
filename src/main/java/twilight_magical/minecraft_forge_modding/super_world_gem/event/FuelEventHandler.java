@@ -2,11 +2,14 @@ package twilight_magical.minecraft_forge_modding.super_world_gem.event;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+
 import twilight_magical.minecraft_forge_modding.super_world_gem.blocks.Block_SuperWorldGemMod;
 import twilight_magical.minecraft_forge_modding.super_world_gem.items.Item_SuperWorldGemMod;
+
 import cpw.mods.fml.common.IFuelHandler;
 
 public class FuelEventHandler implements IFuelHandler
@@ -73,7 +76,7 @@ public class FuelEventHandler implements IFuelHandler
 		Block blockFuel = Block.getBlockFromItem(fuel.getItem());
 		Item itemFuel = fuel.getItem();
 		
-		if (blockFuel== Block_SuperWorldGemMod.HellFireCoalBlock)
+		if (blockFuel == Block_SuperWorldGemMod.HellFireCoalBlock)
 		{
 		  return 6400;
 		}

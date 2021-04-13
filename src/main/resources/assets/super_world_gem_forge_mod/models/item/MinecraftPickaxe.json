@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "super_world_gem:items/WorldTopPickaxe"
+        "layer0": "super_world_gem_forge_mod:items/WorldTopPickaxe"
     },
     "display": {
         "thirdperson": {

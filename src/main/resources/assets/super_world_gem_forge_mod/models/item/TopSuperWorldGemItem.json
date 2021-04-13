@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "super_world_gem:items/Topsuper_world_gemItem"
+        "layer0": "super_world_gem_forge_mod:items/TopSuperWorldGemItem"
     },
     "display": {
         "thirdperson": {

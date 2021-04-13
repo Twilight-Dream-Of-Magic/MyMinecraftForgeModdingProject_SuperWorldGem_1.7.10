@@ -1,0 +1,225 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.entity;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Iterator;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S27PacketExplosion;
+
+import net.minecraft.util.Vec3;
+
+import net.minecraft.world.World;
+
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeExplosion;
+import twilight_magical.minecraft_forge_modding.super_world_gem.event.explode.MyMinecraftNukeRegistry;
+
+public class MyMinecraftNukeEntity extends Entity {
+	
+	public int fuse = 128;
+	
+	private EntityLivingBase tntPlacedBy;
+	
+	public MyMinecraftNukeEntity(World thisWorldObj) {
+		super(thisWorldObj);
+		this.fuse = myNukeFuseTime;
+		this.preventEntitySpawning = true;
+		this.setSize(0.98F, 0.98F);
+		this.yOffset = this.height / 2.0F;
+	}
+
+	public MyMinecraftNukeEntity(World thisWorldObj, double positionX, double positionY, double positionZ, EntityLivingBase entity_living_base) {
+		this(thisWorldObj);
+		setPosition(positionX, positionY, positionZ);
+		float f = (float)(Math.random() * Math.PI * 2.0D);
+		this.motionX = (-((float)Math.sin(f)) * 0.02F);
+		this.motionY = 0.20000000298023224D;
+		this.motionZ = (-((float)Math.cos(f)) * 0.02F);
+		this.fuse = this.getNukeFuse();
+		this.prevPosX = positionX;
+		this.prevPosY = motionY;
+		this.prevPosZ = positionZ;
+		this.tntPlacedBy = entity_living_base;
+	}
+	
+	public int getNukeFuse()
+	{
+		return this.fuse;
+	}
+	
+	public void setNukeFuse(int fuseTime)
+	{
+		this.fuse = fuseTime;
+	}
+	
+	public MyMinecraftNukeExplosion createExplosion(Entity entity, double positionX, double positionY, double positionZ, float nukeExplodeSize, boolean flagSmoking)
+	{
+		return newExplosion(entity, positionX, positionY, positionZ, nukeExplodeSize, true, flagSmoking);
+	}
+	
+	public MyMinecraftNukeExplosion newExplosion(Entity entity, double positionX, double positionY, double positionZ, float myNukeExplodeSize, boolean flagFlaming, boolean flagSmoking)
+	{
+		MyMinecraftNukeExplosion explosion = new MyMinecraftNukeExplosion(this.worldObj, entity, positionX, positionY, positionZ, myNukeExplodeSize);
+		explosion.isFlaming = flagFlaming;
+		explosion.isSmoking = flagSmoking;
+		explosion.doExplosionA();
+		explosion.doExplosionB(true);
+		if (!flagSmoking)
+		{
+			explosion.affectedBlockPositions.clear(); 
+		}
+		
+		Iterator<EntityPlayer> iterator = this.worldObj.playerEntities.iterator();
+		while (iterator.hasNext()) 
+		{
+			EntityPlayer entityplayer = iterator.next();
+			if (entityplayer.getDistanceSq(positionX, positionY, positionZ) < 4096.0D)
+			( (EntityPlayerMP) entityplayer).playerNetServerHandler.sendPacket((Packet)new S27PacketExplosion(positionX, positionY, positionZ, myNukeExplodeSize, explosion.affectedBlockPositions, (Vec3)explosion.func_77277_b().get(entityplayer))); 
+		} 
+		return explosion;
+	}
+
+	@Override
+	public void onUpdate()
+	{
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+		this.motionY -= 0.03999999910593033D;
+		moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.9800000190734863D;
+		this.motionY *= 0.9800000190734863D;
+		this.motionZ *= 0.9800000190734863D;
+		if (this.onGround)
+		{
+			this.motionX *= 0.699999988079071D;
+			this.motionZ *= 0.699999988079071D;
+			this.motionY *= -0.5D;
+		} 
+		if (this.fuse-- <= 0)
+		{
+			setDead();
+			
+			if (!this.worldObj.isRemote)
+			{
+				this.explode(); 
+			}
+		}
+		else
+		{
+			this.worldObj.spawnParticle("smoke", this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+		}
+	
+	}
+	
+	private void explode() {
+		float explosionForce = myNukeExplodeForce;
+		this.createExplosion(this, this.posX, this.posY, this.posZ, explosionForce, true);
+	}
+
+	protected void entityInit() {}
+	
+	@Override
+	protected boolean canTriggerWalking() {
+		return false;
+	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return !this.isDead;
+	}
+	
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		par1NBTTagCompound.setByte("Fuse", (byte)this.fuse);
+	}
+	
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		this.fuse = par1NBTTagCompound.getByte("Fuse");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public float getShadowSize() 
+	{
+		return 0.0F;
+	}
+	
+	public EntityLivingBase getTntPlacedBy() 
+	{
+		return this.tntPlacedBy;
+	}
+	
+	/*
+	private int explosivePower = 10;
+
+	public MyMinecraftNukeEntity(World thisWorldObj, double positionX, double positionY, double positionZ, EntityLivingBase entity_living_base) {
+		super(thisWorldObj, positionX, positionY, positionZ, entity_living_base);
+	}
+
+	public MyMinecraftNukeEntity(World world) 
+	{
+		super(world);
+	}
+	
+	public void setExplosionPowerLevel(int level) 
+	{
+		explosivePower = level;
+	}
+
+	public int getExplosionPowerLevel() 
+	{
+		return explosivePower;
+	}
+
+	protected void explode() 
+	{
+		System.out.println("Beginning Nuking");
+		this.setExplosionPowerLevel(40);
+		MyMinecraftNukeExplosion NukeExplosion = new MyMinecraftNukeExplosion(worldObj, posX, posY, posZ, getExplosionPowerLevel(), this);
+		
+		if(EventHooks.getAllowMyNukeExplosion() == true)
+		{
+			if (MyMinecraftNukeRegistry.getExplosions().isEmpty() == false && MyMinecraftNukeRegistry.isExploding() == false)
+			{
+				EventHooks.setAllowMyNukeExplosion(false);
+				MyMinecraftNukeRegistry.unregisterExplosion(NukeExplosion);
+			}
+			else if (MyMinecraftNukeRegistry.getExplosions().isEmpty() == true && MyMinecraftNukeRegistry.isExploding() == false)
+			{
+				MyMinecraftNukeRegistry.registerExplosion(NukeExplosion);
+				return;
+			}
+			else if (MyMinecraftNukeRegistry.getExplosions().isEmpty() == false && MyMinecraftNukeRegistry.isExploding() == true)
+			{
+				return;
+			}
+		}
+		else if(EventHooks.getAllowMyNukeExplosion() == false)
+		{
+			if(MyMinecraftNukeRegistry.getExplosions().isEmpty() == true && MyMinecraftNukeRegistry.isExploding() == false)
+			{
+				EventHooks.setAllowMyNukeExplosion(true);
+			}
+			else if (MyMinecraftNukeRegistry.getExplosions().isEmpty() == false)
+			{
+				MyMinecraftNukeRegistry.unregisterExplosion(NukeExplosion);
+				return;
+			}
+		}
+		
+		//MyMinecraftNukeRegistry.registerExplosion(new MyMinecraftNukeExplosion(worldObj, posX, posY, posZ, getExplosionPowerLevel(), this));
+		worldObj.playSoundAtEntity(this, "geme.tnt.explosion", 1, 1);
+	}
+	*/
+}

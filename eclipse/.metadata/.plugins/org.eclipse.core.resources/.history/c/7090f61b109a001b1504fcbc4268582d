@@ -1,0 +1,48 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.event.explode;
+
+import java.util.ArrayList;
+
+import net.minecraft.world.Explosion;
+
+public class MyMinecraftNukeRegistry {
+	
+	public static MyMinecraftNukeRegistry INSTANCE = new MyMinecraftNukeRegistry();
+
+    private ArrayList<Explosion> explosions;
+
+    public MyMinecraftNukeRegistry()
+    {
+        explosions = new ArrayList<Explosion>();
+    }
+
+    public void queueExplosion(Explosion explosion)
+    {
+        explosions.add(explosion);
+    }
+
+    public ArrayList<Explosion> getCurrentExplosions()
+    {
+        return this.explosions;
+    }
+
+    public boolean isCurrentlyExploding()
+    {
+        return (explosions.size() != 0);
+    }
+
+    public static ArrayList<Explosion> getExplosions()
+    {
+        return INSTANCE.getCurrentExplosions();
+    }
+
+    public static boolean isExploding()
+    {
+        return INSTANCE.isCurrentlyExploding();
+    }
+
+    public static void registerExplosion(Explosion explosion)
+    {
+        INSTANCE.queueExplosion(explosion);
+    }
+
+}

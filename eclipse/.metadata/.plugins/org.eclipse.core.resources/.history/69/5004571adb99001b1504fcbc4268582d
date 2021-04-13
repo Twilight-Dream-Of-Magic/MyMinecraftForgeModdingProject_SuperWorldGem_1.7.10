@@ -1,0 +1,43 @@
+package twilight_magical.minecraft_forge_modding.super_world_gem.armors;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraft.creativetab.CreativeTabs;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
+public class Armor_SuperWorldGemMod {
+	
+	public static ItemArmor.ArmorMaterial SuperWorldGemArmor = EnumHelper.addArmorMaterial("SUPERWORLDGEMARMOR", 5120, new int[]{300, 400, 200, 100}, 100);
+	
+	public static int armorRendererPrefixID = RenderingRegistry.addNewArmourRendererPrefix("SUPERWORLDGEMARMOR");
+	
+	public static Item helmet_SuperWorldGemArmor;
+	public static Item chest_SuperWorldGemArmor;
+	public static Item leggings_SuperWorldGemArmor;
+	public static Item boots_SuperWorldGemArmor;
+	
+	public static void createItemArmors() {
+		
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+		{
+			helmet_SuperWorldGemArmor = new LoadSuperWorldGemArmor(SuperWorldGemArmor, armorRendererPrefixID, 0)
+					.setTextureName(null)
+					.setUnlocalizedName(null);
+			
+			
+		}
+		
+		GameRegistry.registerItem(helmet_SuperWorldGemArmor, "helmet_SuperWorldGemArmor");
+		GameRegistry.registerItem(chest_SuperWorldGemArmor, "chest_SuperWorldGemArmor");
+		GameRegistry.registerItem(leggings_SuperWorldGemArmor, "leggings_SuperWorldGemArmor");
+		GameRegistry.registerItem(boots_SuperWorldGemArmor, "boots_SuperWorldGemArmor");
+		
+	}
+
+}
